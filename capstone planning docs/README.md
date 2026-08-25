@@ -24,3 +24,4 @@ Suggested:
     - en passant target square
     - halfclock move count since last pawn move or capture
     - full move number, increments after every black move
+- UCI: move notation used by machine, specifies a piece location and their next location. ex: e2e4, g1f3
