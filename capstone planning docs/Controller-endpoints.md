@@ -1,5 +1,5 @@
 ## Auth controller
-- post auth/login
+- post auth/google/login
 
 ## user controller
 - get user/profile

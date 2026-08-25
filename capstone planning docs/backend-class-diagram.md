@@ -20,7 +20,9 @@ classDiagram
 
     class AuthController {
         -AuthService AuthService
-        +handleGoogleCallback(OAuth2User oauthUser) ResponseEntity~AuthTokenDto~
+        -GoogleAuthService googleAuthService
+        -JwtProvider jwtProvider
+        +authenticateGoogleUser() ResponseEntity~JwtTokenDto~
     }
 
     class UserController {
