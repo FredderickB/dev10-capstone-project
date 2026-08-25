@@ -70,6 +70,7 @@ classDiagram
 
     class UserService {
         -UserRepository userRepository
+        -GameRepository gameRepository
         +getUserMetrics(String userId) UserMetricsDto
     }
 
@@ -101,7 +102,6 @@ classDiagram
         -JdbcClient jdbcClient
         +findByGoogleId(String googleId) Optional~User~
         +save(User user) User
-        +getUserMetrics(String userId) UserMetricsDto
     }
 
     %% --- DATA MODELS & DTOS ---
@@ -131,7 +131,7 @@ classDiagram
     }
 
     class UserMetricsDto {
-        +Long id
+        +Long Userid
         +int totalGamesPlayed
         +float whiteWinRate
         +float blackWinRate
