@@ -8,4 +8,9 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+   server: {
+    headers: {
+      'Referrer-Policy': 'no-referrer-when-downgrade',
+    },
+  },
 })
