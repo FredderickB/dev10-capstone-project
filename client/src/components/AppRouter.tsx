@@ -1,10 +1,10 @@
 import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from './Layout'
-import Landing from './Landing';
-import GamePage from './GamePage';
-import ProfilePage from './ProfilePage';
-import NewGamePage from './NewGamePage';
-import NotFound from './NotFound';
+import Landing from './page/Landing';
+import GamePage from './page/GamePage';
+import ProfilePage from './page/ProfilePage';
+import NewGamePage from './page/NewGamePage';
+import NotFound from './page/NotFound';
 
 export default function AppRouter() {
 
