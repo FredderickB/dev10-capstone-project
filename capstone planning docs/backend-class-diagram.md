@@ -19,7 +19,6 @@ classDiagram
     }
 
     class AuthController {
-        -AuthService AuthService
         -GoogleAuthService googleAuthService
         -JwtProvider jwtProvider
         +authenticateGoogleUser() ResponseEntity~JwtTokenDto~
@@ -64,10 +63,11 @@ classDiagram
         +stopEngine() void
     }
 
-    class AuthService {
-        -UserRepository userRepository
+    class GoogleAuthService {
+        -UserService userService
         -JwtTokenProvider jwtTokenProvider
-        +processGoogleUser(OAuth2User oauthUser) String
+        +verifyToken(String token) boolean
+        +authenticateGoogleUser(RequestBody) String
     }
 
     class UserService {
@@ -81,7 +81,7 @@ classDiagram
         -long expirationMs
         +generateToken(String userId, String email) String
         +validateToken(String token) boolean
-        +getUserIdFromToken(String token) String
+        +getUserEmailFromToken(String token) String
     }
 
     %% --- REPOSITORIES (JdbcClient Data Access) ---
@@ -190,7 +190,7 @@ classDiagram
     %% --- RELATIONSHIPS & DEPENDENCIES ---
     GameController --> GameService
     MoveController --> MoveService
-    AuthController --> AuthService
+    AuthController --> GoogleAuthService
     UserController --> UserService
 
     GameService --> GameRepository
@@ -200,8 +200,8 @@ classDiagram
     MoveService --> ChessLibService
     MoveService --> StockfishService
 
-    AuthService --> UserRepository
-    AuthService --> JwtTokenProvider
+    GoogleAuthService --> UserService
+    GoogleAuthService --> JwtTokenProvider
     UserService --> UserRepository
 
     GameRepository ..> Game : manages
