@@ -20,7 +20,6 @@ classDiagram
 
     class AuthController {
         -GoogleAuthService googleAuthService
-        -JwtProvider jwtProvider
         +authenticateGoogleUser() ResponseEntity~JwtTokenDto~
     }
 
@@ -64,9 +63,9 @@ classDiagram
     }
 
     class GoogleAuthService {
+        -IdTokenVerifier verifier
         -UserService userService
         -JwtTokenProvider jwtTokenProvider
-        +verifyToken(String token) boolean
         +authenticateGoogleUser(RequestBody) String
     }
 
@@ -82,6 +81,10 @@ classDiagram
         +generateToken(String userId, String email) String
         +validateToken(String token) boolean
         +getUserEmailFromToken(String token) String
+    }
+
+    class IdTokenVerifier {
+        +verify (String token) payload
     }
 
     %% --- REPOSITORIES (JdbcClient Data Access) ---
@@ -202,6 +205,7 @@ classDiagram
 
     GoogleAuthService --> UserService
     GoogleAuthService --> JwtTokenProvider
+    GoogleAuthService --> IdTokenVerifier
     UserService --> UserRepository
 
     GameRepository ..> Game : manages
