@@ -46,7 +46,44 @@ class UserJDBCClientRepositoryTest {
         }
     }
 
-    @Test
-    void save() {
+    @Nested
+    class create {
+
+        @Test
+        void shouldCreate() throws DataAccessException {
+
+            User expected = getNewUser();
+            expected.setUserId(3);
+
+            User actual = repository.create(getNewUser());
+
+            assertEquals(expected, actual);
+
+            User actualFound = repository.findByEmail(getNewUser().getEmail());
+            assertEquals(expected, actualFound);
+
+        }
+
     }
+
+    @Nested
+    class update {
+
+        @Test
+        void shouldUpdate() throws DataAccessException {
+
+            User expected = getUserA();
+            expected.setUsername("new name");
+
+            User actual = repository.update(expected);
+
+            assertEquals(expected, actual);
+
+            User actualFound = repository.findByEmail(getUserA().getEmail());
+            assertEquals(expected, actualFound);
+
+        }
+
+    }
+
 }

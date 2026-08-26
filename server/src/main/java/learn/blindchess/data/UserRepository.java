@@ -6,6 +6,8 @@ public interface UserRepository {
 
     User findByEmail(String email) throws DataAccessException;
 
-    User save(User user) throws DataAccessException;
+    User create(User user) throws DataAccessException;
+
+    User update(User user) throws DataAccessException;
 
 }

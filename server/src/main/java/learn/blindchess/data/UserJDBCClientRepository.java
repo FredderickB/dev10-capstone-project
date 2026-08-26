@@ -2,6 +2,8 @@ package learn.blindchess.data;
 
 import learn.blindchess.model.User;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -30,8 +32,50 @@ public class UserJDBCClientRepository implements UserRepository{
                 .optional().orElse(null);
     }
 
+
     @Override
-    public User save(User user) throws DataAccessException {
-        return null;
+    public User create(User user) throws DataAccessException {
+
+        String sql = """
+                insert into user (email, username)
+                values (:email, :username)
+                """;
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        int rowsAffected = client.sql(sql)
+                .param("email", user.getEmail())
+                .param("username", user.getUsername())
+                .update(keyHolder, "user_id");
+
+        if (rowsAffected == 0) {
+            return null;
+        }
+
+        user.setUserId(keyHolder.getKey().intValue());
+        return user;
+
+    }
+
+
+    public User update(User user) throws DataAccessException {
+
+        String sql = """
+            update user
+            set username = :username
+            where email = :email
+            """;
+
+        int rowsAffected = client.sql(sql)
+                .param("username", user.getUsername())
+                .param("email", user.getEmail())
+                .update();
+
+        if (rowsAffected == 0) {
+            return null;
+        }
+
+        return user;
+
     }
 }
