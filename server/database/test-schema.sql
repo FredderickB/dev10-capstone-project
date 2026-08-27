@@ -39,11 +39,14 @@ create table game (
 delimiter //
 create procedure set_known_good_state()
 begin
+	delete from game;
+	alter table game auto_increment = 1;
 	delete from user;
     alter table user auto_increment = 1;
-	
     insert into user (email, username) values
         ("a@a.com", "a"),
         ("b@b.com", "b");
+    insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks) values
+    	(1, 1000, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 4, "2000-01-01 01:01:00", 0);
 end //
 delimiter ;

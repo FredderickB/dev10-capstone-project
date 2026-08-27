@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Game {
 
-    private int gameId;
+    private Integer gameId;
     private int engineLevel;
     private String fen;
     private GameStatus status;
@@ -23,7 +23,20 @@ public class Game {
         this.fen = game.getFen();
     }
 
-    public int getGameId() {
+    public Game() {
+    }
+
+    public Game(Integer gameId, int engineLevel, String fen, LocalDateTime createdAt, GameStatus status, int boardPeaks, User user) {
+        this.gameId = gameId;
+        this.engineLevel = engineLevel;
+        this.fen = fen;
+        this.createdAt = createdAt;
+        this.status = status;
+        this.boardPeaks = boardPeaks;
+        this.user = user;
+    }
+
+    public Integer getGameId() {
         return gameId;
     }
 
