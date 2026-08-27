@@ -1,11 +1,14 @@
-import { GoogleLoginButton } from './components/googleLoginButton'
+import { AuthProvider } from './components/AuthContext'
+import AppRouter from './components/AppRouter'
 
 
 function App() {
 
   return (
     <>
-      <GoogleLoginButton />
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
     </>
   )
 }
