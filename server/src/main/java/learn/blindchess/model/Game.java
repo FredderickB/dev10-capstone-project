@@ -9,9 +9,10 @@ public class Game {
     private int engineLevel;
     private String fen;
     private GameStatus status;
+    private PlayerColor playerColor;
     private LocalDateTime createdAt;
     private int boardPeaks;
-    private User user;
+    private Integer userId;
 
     public Game(Game game) {
         this.gameId = game.getGameId();
@@ -19,21 +20,23 @@ public class Game {
         this.status = game.getStatus();
         this.createdAt = game.getCreatedAt();
         this.boardPeaks = game.getBoardPeaks();
-        this.user = game.getUser();
+        this.playerColor = game.getPlayerColor();
+        this.userId = game.getUserId();
         this.fen = game.getFen();
     }
 
     public Game() {
     }
 
-    public Game(Integer gameId, int engineLevel, String fen, LocalDateTime createdAt, GameStatus status, int boardPeaks, User user) {
+    public Game(Integer gameId, int engineLevel, String fen, LocalDateTime createdAt, GameStatus status,PlayerColor playerColor, int boardPeaks, Integer userId) {
         this.gameId = gameId;
         this.engineLevel = engineLevel;
         this.fen = fen;
         this.createdAt = createdAt;
         this.status = status;
+        this.playerColor = playerColor;
         this.boardPeaks = boardPeaks;
-        this.user = user;
+        this.userId = userId;
     }
 
     public Integer getGameId() {
@@ -50,6 +53,14 @@ public class Game {
 
     public void setEngineLevel(int engineLevel) {
         this.engineLevel = engineLevel;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getFen() {
@@ -84,24 +95,28 @@ public class Game {
         this.boardPeaks = boardPeaks;
     }
 
-    public User getUser() {
-        return user;
+    public void setGameId(Integer gameId) {
+        this.gameId = gameId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public PlayerColor getPlayerColor() {
+        return playerColor;
+    }
+
+    public void setPlayerColor(PlayerColor playerColor) {
+        this.playerColor = playerColor;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return gameId == game.gameId && engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && Objects.equals(fen, game.fen) && status == game.status && Objects.equals(createdAt, game.createdAt) && Objects.equals(user, game.user);
+        return engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && Objects.equals(gameId, game.gameId) && Objects.equals(fen, game.fen) && status == game.status && playerColor == game.playerColor && Objects.equals(createdAt, game.createdAt) && Objects.equals(userId, game.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameId, engineLevel, fen, status, createdAt, boardPeaks, user);
+        return Objects.hash(gameId, engineLevel, fen, status, playerColor, createdAt, boardPeaks, userId);
     }
 
     @Override
@@ -111,9 +126,10 @@ public class Game {
                 ", engineLevel=" + engineLevel +
                 ", fen='" + fen + '\'' +
                 ", status=" + status +
+                ", playerColor=" + playerColor +
                 ", createdAt=" + createdAt +
                 ", boardPeaks=" + boardPeaks +
-                ", user=" + user +
+                ", userId=" + userId +
                 '}';
     }
 }

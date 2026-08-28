@@ -20,12 +20,22 @@ insert into game_status (status_text) values
 	("DRAW"),
 	("IN_PROGRESS");
 
+create table player_color (
+	player_color_id int primary key auto_increment,
+	color_text varchar(10) not null
+);
+
+insert into player_color values
+	("WHITE"),
+	("BLACK");
+
 create table game (
 	game_id int primary key auto_increment,
 	user_id int null,
 	engine_level int not null,
 	fen varchar(100) not null,
 	status_id int not null,
+	player_color_id int,
 	created_at timestamp default CURRENT_TIMESTAMP,
 	board_peaks int not null default 0,
 	constraint fk_user_id_game
@@ -34,5 +44,8 @@ create table game (
 		on delete set null,
 	constraint fk_status_id_game
 		foreign key (status_id)
-		references game_status(status_id)
+		references game_status(status_id),
+	constraint fk_player_color_id_game
+		foreign key (player_color_id)
+		references player_color(player_color_id)
 );	

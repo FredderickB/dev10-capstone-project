@@ -2,6 +2,7 @@ package learn.blindchess.data;
 
 import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
+import learn.blindchess.model.PlayerColor;
 import learn.blindchess.model.User;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -18,12 +19,11 @@ public class GameRowMapper implements RowMapper<Game> {
         game.setEngineLevel(rs.getInt("engine_level"));
         game.setFen(rs.getString("fen"));
         game.setStatus(GameStatus.fromStatusId(rs.getInt("status_id")));
+        game.setPlayerColor(PlayerColor.fromPlayerColorId(rs.getInt("player_color_id")));
         game.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         game.setBoardPeaks(rs.getInt("board_peaks"));
+        game.setUserId(rs.getInt("user_id"));
 
-        UserRowMapper userRowMapper = new UserRowMapper();
-        User user = userRowMapper.mapRow(rs, rowNum);
-        game.setUser(user);
 
         return game;
     }

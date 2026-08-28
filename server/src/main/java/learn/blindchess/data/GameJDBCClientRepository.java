@@ -20,12 +20,14 @@ public class GameJDBCClientRepository implements GameRepository{
                     g.engine_level,
                     g.fen,
                     g.status_id,
+                    g.player_color_id,
                     g.board_peaks,
                     g.created_at,
                     u.username,
                     u.email
                 from game g
                 left join user u on u.user_id = g.user_id
+                join player_color p on p.player_color_id = g.player_color_id
                 where game_id = ?;
                 """;
 
@@ -42,19 +44,20 @@ public class GameJDBCClientRepository implements GameRepository{
     @Override
     public Game create(Game game) throws DataAccessException {
         String sql = """
-                 insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks) values
-                    	(:userId, :engineLevel, :fen, :statusId, :createdAt, :boardPeaks);
+                 insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks, player_color_id) values
+                    	(:userId, :engineLevel, :fen, :statusId, :createdAt, :boardPeaks, :playerColorId);
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rowsAffected = client.sql(sql)
-                .param("userId", game.getUser().getUserId())
+                .param("userId", game.getUserId())
                 .param("engineLevel", game.getEngineLevel())
                 .param("fen", game.getFen())
                 .param("statusId", game.getStatus().getStatusId())
                 .param("createdAt", game.getCreatedAt())
                 .param("boardPeaks", game.getBoardPeaks())
+                .param("playerColorId", game.getPlayerColor().getPlayerColorId())
                 .update(keyHolder, "game_id");
 
         if (rowsAffected == 0) {

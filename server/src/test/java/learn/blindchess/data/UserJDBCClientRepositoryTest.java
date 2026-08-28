@@ -47,6 +47,27 @@ class UserJDBCClientRepositoryTest {
     }
 
     @Nested
+    class findById{
+
+        @Test
+        void shouldFind() throws DataAccessException {
+
+            User actual = repository.findById(getUserA().getUserId());
+            User expected = getUserA();
+            assertEquals(expected, actual);
+
+        }
+
+        @Test
+        void shouldNotFindNull() throws DataAccessException {
+
+            User actual = repository.findById(null);
+            assertNull(actual);
+
+        }
+    }
+
+    @Nested
     class create {
 
         @Test

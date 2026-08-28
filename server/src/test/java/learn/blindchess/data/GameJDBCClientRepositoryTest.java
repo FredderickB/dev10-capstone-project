@@ -43,4 +43,18 @@ class GameJDBCClientRepositoryTest {
         assertEquals(expected, actual);
 
     }
+
+    @Test
+    void shouldCreateWithNullUser() throws DataAccessException {
+
+        Game newGame = getNewGame();
+        newGame.setUserId(null);
+
+        Game expected = newGame;
+        expected.setGameId(2);
+        Game actual = repository.create(newGame);
+
+        assertEquals(expected, actual);
+
+    }
 }
