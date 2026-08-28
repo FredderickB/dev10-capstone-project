@@ -3,10 +3,7 @@ package learn.blindchess;
 import learn.blindchess.domain.Result;
 import learn.blindchess.domain.ResultType;
 import learn.blindchess.dto.GameRequestDto;
-import learn.blindchess.model.Game;
-import learn.blindchess.model.GameStatus;
-import learn.blindchess.model.PlayerColor;
-import learn.blindchess.model.User;
+import learn.blindchess.model.*;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +36,9 @@ public class TestHelper {
 
     private static final GameRequestDto GAME_REQUEST_DTO_A = new GameRequestDto("WHITE", 1000);
 
+    private static final Move MOVE_A = new Move(1, 1, 1, "E4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+    private static final Move NEW_MOVE = new Move(null, 1, 1, "E5", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
+
     public static User getUserA() {
         return new User(USER_A);
     }
@@ -51,6 +51,9 @@ public class TestHelper {
 
     public static Game getGameA() { return new Game(GAME_A);}
     public static Game getNewGame() { return new Game(NEW_GAME);}
+
+    public static Move getMoveA() { return new Move(MOVE_A);}
+    public static Move getNewMove() { return new Move(NEW_MOVE); }
 
     public static GameRequestDto getNewGameRequestDto() { return new GameRequestDto(GAME_REQUEST_DTO_A.playerColor(), GAME_REQUEST_DTO_A.engineLevel());}
 

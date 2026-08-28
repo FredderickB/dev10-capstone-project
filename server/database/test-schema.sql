@@ -47,7 +47,7 @@ create table game (
 	constraint fk_player_color_id_game
 		foreign key (player_color_id)
 		references player_color(player_color_id)
-)
+);
 
 create table move (
 	move_id int primary key auto_increment,
@@ -64,6 +64,8 @@ create table move (
 delimiter //
 create procedure set_known_good_state()
 begin
+	delete from move;
+	alter table move auto_increment = 1;
 	delete from game;
 	alter table game auto_increment = 1;
 	delete from user;
@@ -73,6 +75,8 @@ begin
         ("b@b.com", "b");
     insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks, player_color_id) values
     	(1, 1000, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 4, "2000-01-01 01:01:00", 0, 1);
+	insert into move (game_id, move_number, move_san, fen_after) values 
+		(1, 1, "E4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
 end //
 delimiter ;
 

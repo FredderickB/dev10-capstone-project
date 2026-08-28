@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Move {
 
-    private int moveId;
+    private Integer moveId;
     private int gameId;
     private int moveNumber;
     private String moveSan;
@@ -18,11 +18,22 @@ public class Move {
         this.fenAfter = move.getFenAfter();
     }
 
-    public int getMoveId() {
+    public Move(Integer moveId, int gameId, int moveNumber, String moveSan, String fenAfter) {
+        this.moveId = moveId;
+        this.gameId = gameId;
+        this.moveNumber = moveNumber;
+        this.moveSan = moveSan;
+        this.fenAfter = fenAfter;
+    }
+
+    public Move() {
+    }
+
+    public Integer getMoveId() {
         return moveId;
     }
 
-    public void setMoveId(int moveId) {
+    public void setMoveId(Integer moveId) {
         this.moveId = moveId;
     }
 
