@@ -5,6 +5,7 @@ import GamePage from './page/GamePage';
 import ProfilePage from './page/ProfilePage';
 import NewGamePage from './page/NewGamePage';
 import NotFound from './page/NotFound';
+import LogoutPage from './page/LogoutPage';
 
 export default function AppRouter() {
 
@@ -18,7 +19,7 @@ export default function AppRouter() {
           element: <Landing />,
         },
         {
-          path: "game",
+          path: "game/:gameId",
           element: <GamePage />,
         },
         {
@@ -28,6 +29,10 @@ export default function AppRouter() {
         {
           path: "profile",
           element: <ProfilePage />,
+        },
+        {
+          path: "logout",
+          element: <LogoutPage />,
         },
         {
           path: '*',

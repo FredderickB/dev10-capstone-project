@@ -1,0 +1,11 @@
+@base_url = http://localhost:8080/api/games
+
+# create happy path
+
+POST {{base_url}}
+Content-Type: application/json
+
+{
+  "PlayerColor": "White",
+  "engineLevel": 1000
+}

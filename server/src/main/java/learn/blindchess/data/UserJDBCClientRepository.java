@@ -32,6 +32,23 @@ public class UserJDBCClientRepository implements UserRepository{
                 .optional().orElse(null);
     }
 
+    @Override
+    public User findById(Integer userId) throws DataAccessException {
+        String sql = """
+                select
+                    user_id,
+                    email,
+                    username
+                from user
+                where user_id = ?
+                """;
+
+        return client.sql(sql)
+                .param(userId)
+                .query(new UserRowMapper())
+                .optional().orElse(null);
+    }
+
 
     @Override
     public User create(User user) throws DataAccessException {

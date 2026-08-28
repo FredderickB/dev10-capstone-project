@@ -6,6 +6,6 @@ public interface JwtProvider {
 
     boolean validateToken(String token);
 
-    String getEmailFromToken(String token);
+    Integer getIntFromToken(String token);
 
 }

@@ -1,7 +1,15 @@
 import React from 'react'
 
-export default function BoardActions() {
+interface props {
+  boardToggle: () => void;
+}
+
+export default function BoardActions({boardToggle}: props) {
   return (
-    <div>BoardActions</div>
+    <>
+      <button onClick={boardToggle}>toggle board</button>
+      <label htmlFor='move-input'> enter your move </label>
+      <input id='move-input' type='text'/>
+    </>
   )
 }

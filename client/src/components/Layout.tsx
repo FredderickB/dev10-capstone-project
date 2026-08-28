@@ -13,11 +13,19 @@ export default function Layout() {
             </NavLink>
             <ul>
                 {token ?
-                    <li>
-                        <NavLink to='profile'>
-                            Profile
-                        </NavLink>
-                    </li> :
+                    <>
+                        <li>
+                            <NavLink to='profile'>
+                                Profile
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='logout'>
+                                Log Out
+                            </NavLink>
+                        </li>
+                    </>
+                    :
                     null}
             </ul>
             <Outlet />

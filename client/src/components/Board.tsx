@@ -4,6 +4,7 @@ import { useState } from 'react';
 export default function Board() {
 
   const [fen] = useState('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+  const [ viewBoard, setViewBoard ] = useState<boolean>(false)
 
   return (
     <div style={{ width: '500px' }}>
