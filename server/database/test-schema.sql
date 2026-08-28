@@ -49,6 +49,18 @@ create table game (
 		references player_color(player_color_id)
 )
 
+create table move (
+	move_id int primary key auto_increment,
+	game_id int,
+	move_number int not null,
+	move_san varchar(10) not null,
+	fen_after varchar(100) not null,
+	constraint fk_game_id_move
+		foreign key (game_id)
+		references game(game_id)
+		on delete cascade
+);
+
 delimiter //
 create procedure set_known_good_state()
 begin

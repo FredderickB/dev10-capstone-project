@@ -49,3 +49,15 @@ create table game (
 		foreign key (player_color_id)
 		references player_color(player_color_id)
 );	
+
+create table move (
+	move_id int primary key auto_increment,
+	game_id int,
+	move_number int not null,
+	move_san varchar(10) not null,
+	fen_after varchar(100) not null,
+	constraint fk_game_id_move
+		foreign key (game_id)
+		references game(game_id)
+		on delete cascade
+);
