@@ -19,7 +19,7 @@ export default function AppRouter() {
           element: <Landing />,
         },
         {
-          path: "game",
+          path: "game/:gameId",
           element: <GamePage />,
         },
         {

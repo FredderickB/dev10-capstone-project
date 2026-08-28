@@ -1,7 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function PlayerActions() {
   return (
-    <div>PlayerActions</div>
+    <>
+    <button> resign </button>
+    <Link to='/'> play later </Link>
+    </>
   )
 }

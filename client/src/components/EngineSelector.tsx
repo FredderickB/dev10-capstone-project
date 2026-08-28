@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 
-export default function EngineSelector() {
+interface props {
+  value : number;
+  onChange: (engineLevel: number) => void;
+}
 
-  const [value, setValue] = useState(100)
+export default function EngineSelector({ value, onChange}: props) {
 
+  
   const max = 2500;
   const step = 100;
 
@@ -18,7 +22,7 @@ export default function EngineSelector() {
       <select
         id="number-select"
         value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
+        onChange={(e) => onChange( Number (e.target.value))}
       >
         {options.map((option) => (
           <option key={option} value={option}>

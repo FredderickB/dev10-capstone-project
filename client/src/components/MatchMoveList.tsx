@@ -2,6 +2,9 @@ import React from 'react'
 
 export default function MatchMoveList() {
   return (
-    <div>MatchMoveList</div>
+    <>
+    <p> move list </p>
+    <p> 1. </p>
+    </>
   )
 }

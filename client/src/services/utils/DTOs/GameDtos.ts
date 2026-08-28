@@ -1,7 +1,7 @@
 
 export interface GameRequestDto {
 
-    playerColor: string | null;
+    playerColor: string;
     engineLevel: number;
     
 }

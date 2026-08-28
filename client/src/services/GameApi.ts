@@ -5,18 +5,22 @@ import type { GameRequestDto, GameResponseDto } from "./utils/DTOs/GameDtos";
 const API_URL = "http://localhost:8080/api/games";
 
 
-export async function createGame(jwtToken : string, requestDto : GameRequestDto) : Promise<Result<GameResponseDto>> {
+export async function createGame(jwtToken: string | null, requestDto: GameRequestDto): Promise<Result<GameResponseDto>> {
 
-    const config = {
-        method: 'POST',
-      headers: {
-        'Authorization': jwtToken,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestDto),
-    }
+  if (!jwtToken) {
+    jwtToken = ''
+  }
 
-    const response = await fetch(`${API_URL}`, config)
-    return await makeResult<GameResponseDto>(response);
-    
+  const config = {
+    method: 'POST',
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestDto),
+  }
+
+  const response = await fetch(`${API_URL}`, config)
+  return await makeResult<GameResponseDto>(response);
+
 }
