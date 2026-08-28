@@ -46,7 +46,7 @@ public class GameController {
             return build(result);
         } else {
             GameResponseDto dto = new GameResponseDto(result.getPayload());
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
         }
 
 

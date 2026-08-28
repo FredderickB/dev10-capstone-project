@@ -6,6 +6,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Types;
+
 @Repository
 public class GameJDBCClientRepository implements GameRepository{
 
@@ -51,7 +53,7 @@ public class GameJDBCClientRepository implements GameRepository{
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rowsAffected = client.sql(sql)
-                .param("userId", game.getUserId())
+                .param("userId", game.getUserId(), Types.INTEGER)
                 .param("engineLevel", game.getEngineLevel())
                 .param("fen", game.getFen())
                 .param("statusId", game.getStatus().getStatusId())

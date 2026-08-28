@@ -25,7 +25,7 @@ create table player_color (
 	color_text varchar(10) not null
 );
 
-insert into player_color values
+insert into player_color (color_text)values
 	("WHITE"),
 	("BLACK");
 
