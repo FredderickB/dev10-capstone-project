@@ -8,7 +8,7 @@ import java.io.*;
 @Service
 public class StockFishService {
 
-    private static final String STOCKFISH_PATH = "\"C:\\Users\\FreddyBlanco\\Documents\\Dev-10-training\\dev10-capstone-project\\server\\src\\main\\resources\\stockfish\\stockfish.exe\"";
+    private static final String STOCKFISH_PATH = "src/main/resources/stockfish/stockfish.exe";
 
     public String getStockFishMove(String fen, int targetElo) {
 

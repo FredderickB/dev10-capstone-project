@@ -1,10 +1,8 @@
 package learn.blindchess.domain;
 
 import learn.blindchess.data.DataAccessException;
-import learn.blindchess.data.GameRepository;
 import learn.blindchess.data.MoveRepository;
 import learn.blindchess.dto.FullTurnDto;
-import learn.blindchess.dto.GameResponseDto;
 import learn.blindchess.dto.MoveRequestDto;
 import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
@@ -26,7 +24,7 @@ public class MoveService {
         this.chessLibService = chessLibService;
     }
 
-    private Result<FullTurnDto> processPlayerMove(MoveRequestDto moveRequestDto) throws DataAccessException {
+    public Result<FullTurnDto> processPlayerMove(MoveRequestDto moveRequestDto) throws DataAccessException {
 
         Result<FullTurnDto> result = new Result<>();
 
@@ -72,6 +70,12 @@ public class MoveService {
         }
 
         Game updatedGame = gameService.findById(moveRequestDto.gameId());
+
+        if (updatedGame == null) {
+            result.addErrorMessage("Game id" + moveRequestDto.gameId() + "not found", ResultType.NOT_FOUND);
+            return result;
+        }
+
         updatedGame.setFen(finalFen);
         gameService.update(updatedGame);
 
@@ -104,7 +108,7 @@ public class MoveService {
         engineMove.setFenAfter(fullTurnDto.updatedFen());
         engineMove.setGameId(fullTurnDto.gameId());
         engineMove.setMoveNumber(fullTurnDto.moveNumber()-1);
-        engineMove.setMoveSan(fullTurnDto.playerSan());
+        engineMove.setMoveSan(fullTurnDto.engineSan());
         moveRepository.saveMove(engineMove);
 
     }

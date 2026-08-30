@@ -14,10 +14,13 @@ create table game_status (
 );
 
 insert into game_status (status_text) values 
+	("IN_PROGRESS")
 	("WHITE_WIN"),
 	("BLACK_WIN"),
-	("DRAW"),
-	("IN_PROGRESS");
+	("DRAW_INSUFFICIENT_MATERIAL"),
+	("DRAW_STALEMATE"),
+	("DRAW_50_MOVE_REPETITION");
+	
 
 create table player_color (
 	player_color_id int primary key auto_increment,

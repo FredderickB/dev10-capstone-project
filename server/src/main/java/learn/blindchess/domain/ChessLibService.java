@@ -58,8 +58,10 @@ public class ChessLibService {
 
         List<Move> legalMoves = board.legalMoves();
 
-        for (Move move : legalMoves) {
-            String legalSan = move.getSan();
+        for (Move legalMove : legalMoves) {
+            MoveList moveList = new MoveList(fen);
+            moveList.add(legalMove);
+            String legalSan = moveList.toSanArray()[moveList.size()-1];
             if (legalSan.equals(proposedSan)) {
                 return true;
             }
