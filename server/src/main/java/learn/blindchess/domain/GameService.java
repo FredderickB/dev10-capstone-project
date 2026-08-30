@@ -43,7 +43,10 @@ public class GameService {
 
     }
 
-    public void update(Game game) {
+    public boolean update(Game game) throws DataAccessException {
+
+        return gameRepository.update(game);
+
     }
 
     private Result<Game> validateGameRequest(GameRequestDto dto) {

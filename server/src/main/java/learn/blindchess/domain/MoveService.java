@@ -32,6 +32,12 @@ public class MoveService {
         int elo = moveRequestDto.engineLevel();
         String playerSan = moveRequestDto.playerSan();
 
+        Game updatedGame = gameService.findById(moveRequestDto.gameId());
+
+        if (updatedGame == null) {
+            result.addErrorMessage("Game id" + moveRequestDto.gameId() + "not found", ResultType.NOT_FOUND);
+            return result;
+        }
         boolean isLegalMove = chessLibService.isLegalMove(moveRequestDto.playerSan(), currentFen);
 
         if (!isLegalMove) {
@@ -56,6 +62,7 @@ public class MoveService {
 
         if (gameStatusAfterPlayerMove != GameStatus.IN_PROGRESS) {
             message = formatGameEndMessage(gameStatusAfterPlayerMove);
+            updatedGame.setStatus(gameStatusAfterPlayerMove);
         } else {
 
             String engineUci = stockFishService.getStockFishMove(fenAfterPlayerMove, elo);
@@ -66,15 +73,10 @@ public class MoveService {
             GameStatus statusAfterEngineMove = chessLibService.getGameStatus(finalFen);
             if (statusAfterEngineMove != GameStatus.IN_PROGRESS){
                 message = formatGameEndMessage(statusAfterEngineMove);
+                updatedGame.setStatus(statusAfterEngineMove);
             }
         }
 
-        Game updatedGame = gameService.findById(moveRequestDto.gameId());
-
-        if (updatedGame == null) {
-            result.addErrorMessage("Game id" + moveRequestDto.gameId() + "not found", ResultType.NOT_FOUND);
-            return result;
-        }
 
         updatedGame.setFen(finalFen);
         gameService.update(updatedGame);
