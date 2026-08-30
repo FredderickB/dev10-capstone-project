@@ -6,4 +6,6 @@ public interface GameRepository {
 
     Game findById(Integer id) throws DataAccessException;
     Game create(Game game) throws DataAccessException;
+    boolean update(Game game) throws DataAccessException;
+
 }

@@ -69,4 +69,24 @@ public class GameJDBCClientRepository implements GameRepository{
         game.setGameId(keyHolder.getKey().intValue());
         return game;
     }
+
+    @Override
+    public boolean update(Game game) throws DataAccessException {
+        String sql = """
+            UPDATE game SET
+                fen = :fen,
+                status_id = :statusId,
+                board_peaks = :boardPeaks
+            WHERE game_id = :gameId;
+            """;
+
+        int rowsAffected = client.sql(sql)
+                .param("fen", game.getFen())
+                .param("gameId", game.getGameId())
+                .param("statusId", game.getStatus().getStatusId())
+                .param("boardPeaks", game.getBoardPeaks())
+                .update();
+
+        return rowsAffected > 0;
+    }
 }
