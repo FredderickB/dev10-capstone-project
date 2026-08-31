@@ -1,9 +1,11 @@
 import { Chessboard } from 'react-chessboard';
 import { useState } from 'react';
 
-export default function Board() {
+interface props {
+  fen: string | undefined;
+}
+export default function Board({ fen }:props) {
 
-  const [fen] = useState('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
   const [ viewBoard, setViewBoard ] = useState<boolean>(false)
 
   return (

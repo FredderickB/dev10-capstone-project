@@ -24,3 +24,22 @@ export async function createGame(jwtToken: string | null, requestDto: GameReques
   return await makeResult<GameResponseDto>(response);
 
 }
+
+export async function fetchGame(jwtToken: string | null, gameId: number): Promise<Result<GameResponseDto>> {
+
+  if (!jwtToken) {
+    jwtToken = ''
+  }
+
+  const config = {
+    method: 'GET',
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+  }
+
+  const response = await fetch(`${API_URL}/${gameId}`, config)
+  return await makeResult<GameResponseDto>(response);
+
+}

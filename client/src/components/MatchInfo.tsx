@@ -3,12 +3,19 @@ import MatchStatus from './MatchStatus'
 import MatchMoveList from './MatchMoveList'
 import MoveResponseContainer from './MoveResponseContainer'
 
-export default function MatchInfo() {
+interface props {
+
+  errors: string[]
+  engineResponse: string | undefined
+  gameStatus: string | undefined
+
+}
+export default function MatchInfo({ errors, engineResponse, gameStatus }: props) {
   return (
     <div>
       <MatchStatus />
       <MatchMoveList />
-      <MoveResponseContainer />
+      <MoveResponseContainer errors={errors} engineResponse={engineResponse} gameStatus={gameStatus} />
     </div>
   )
 }

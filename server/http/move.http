@@ -8,6 +8,6 @@ Content-Type: application/json
   "gameId": 1,
   "moveNumber": 0,
   "currentFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-  "playerSan": "e4",
+  "playerSan": "d4",
   "engineLevel": 1500
 }

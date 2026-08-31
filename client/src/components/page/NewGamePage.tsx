@@ -9,6 +9,7 @@ import { useAuth } from '../AuthContext'
 export default function NewGamePage() {
 
   const [ request, setRequest ] = useState<GameRequestDto>({
+    gameId: 0,
     playerColor : "WHITE",
     engineLevel: 1000,
   })
