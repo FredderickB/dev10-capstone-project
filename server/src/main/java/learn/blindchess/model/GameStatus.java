@@ -3,10 +3,12 @@ package learn.blindchess.model;
 import java.util.Arrays;
 
 public enum GameStatus {
-    WHITE_WIN(1),
-    BLACK_WIN(2),
-    DRAW(3),
-    IN_PROGRESS(4);
+    IN_PROGRESS(1),
+    WHITE_WIN(2),
+    BLACK_WIN(3),
+    DRAW_INSUFFICIENT_MATERIAL(4),
+    DRAW_STALEMATE(5),
+    DRAW_50_MOVE_REPETITION(6);
 
     private final int statusId;
 

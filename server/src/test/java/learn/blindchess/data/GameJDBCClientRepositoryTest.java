@@ -57,4 +57,30 @@ class GameJDBCClientRepositoryTest {
         assertEquals(expected, actual);
 
     }
+
+    @Test
+    void shouldUpdate() throws DataAccessException {
+
+        Game updatedGame = getGameA();
+        updatedGame.setFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+        boolean actual = repository.update(updatedGame);
+
+        assertTrue(actual);
+        assertEquals(updatedGame, repository.findById(updatedGame.getGameId()));
+
+    }
+
+    @Test
+    void shouldNotUpdate() throws DataAccessException {
+
+        Game updatedGame = getGameA();
+        updatedGame.setFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+        updatedGame.setGameId(9999);
+
+        boolean actual = repository.update(updatedGame);
+
+        assertFalse(actual);
+    }
+
+
 }

@@ -224,6 +224,7 @@ classDiagram
     UserRepository ..> User : manages
 
     Game --> PlayerColor
+    Game --> GameStatus
 
     UserService ..> UserMetricsDto: produces
     

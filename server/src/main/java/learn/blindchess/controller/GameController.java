@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static learn.blindchess.controller.ErrorResponse.build;
 
@@ -49,6 +46,27 @@ public class GameController {
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
         }
 
-
     }
+
+    @GetMapping("/{gameId}")
+    public ResponseEntity<?> getGame(
+            @AuthenticationPrincipal Authentication authentication,
+            @PathVariable int gameId) throws DataAccessException {
+
+        Integer userId = null;
+// todo: authorize user
+        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
+            userId = id;
+        }
+
+        Game gameFound = service.findById(gameId);
+
+        if (gameFound != null) {
+            GameResponseDto dto = new GameResponseDto(gameFound);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
+    }
+
 }

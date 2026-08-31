@@ -24,6 +24,11 @@ public class GameService {
         this.userRepository = userRepository;
     }
 
+    public Game findById(int gameId) throws DataAccessException {
+
+        return gameRepository.findById(gameId);
+    }
+
     public Result<Game> create(Integer userId, GameRequestDto gameRequestDto) throws DataAccessException {
 
         Result<Game> result = validateGameRequest(gameRequestDto);
@@ -35,6 +40,12 @@ public class GameService {
         }
 
         return result;
+
+    }
+
+    public boolean update(Game game) throws DataAccessException {
+
+        return gameRepository.update(game);
 
     }
 
