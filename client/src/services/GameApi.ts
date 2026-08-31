@@ -43,3 +43,22 @@ export async function fetchGame(jwtToken: string | null, gameId: number): Promis
   return await makeResult<GameResponseDto>(response);
 
 }
+
+export async function sendResignation(jwtToken: string | null, gameId: number) :Promise<Result<void>>{
+
+   if (!jwtToken) {
+    jwtToken = ''
+  }
+
+  const config = {
+    method: 'POST',
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+  }
+
+  const response = await fetch(`${API_URL}/${gameId}/resign`, config)
+  return await makeResult<void>(response);
+
+}

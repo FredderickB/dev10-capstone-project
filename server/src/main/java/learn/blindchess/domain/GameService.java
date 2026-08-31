@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static learn.blindchess.model.PlayerColor.BLACK;
+import static learn.blindchess.model.PlayerColor.WHITE;
+
 @Service
 public class GameService {
 
@@ -40,6 +43,21 @@ public class GameService {
         }
 
         return result;
+
+    }
+
+    public boolean resign (Game game) throws DataAccessException {
+
+        PlayerColor playerColor = game.getPlayerColor();
+        PlayerColor engineColor = playerColor == WHITE? BLACK: WHITE;
+
+        if (engineColor == WHITE) {
+            game.setStatus(GameStatus.WHITE_WIN);
+        } else {
+            game.setStatus(GameStatus.BLACK_WIN);
+        }
+
+        return update(game);
 
     }
 

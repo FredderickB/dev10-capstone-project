@@ -3,10 +3,13 @@ import { useState } from 'react';
 
 interface props {
   fen: string | undefined;
+  playerColor: string | undefined;
 }
-export default function Board({ fen }:props) {
+export default function Board({ fen, playerColor }:props) {
 
   const [ viewBoard, setViewBoard ] = useState<boolean>(false)
+
+  const resolvedPlayerColor = playerColor === "WHITE"? "white": "black";
 
   return (
     <div style={{ width: '500px' }}>
@@ -14,6 +17,7 @@ export default function Board({ fen }:props) {
         options={{
           position: fen,
           allowDragging: false,
+          boardOrientation: resolvedPlayerColor
         }}
       />
     </div>

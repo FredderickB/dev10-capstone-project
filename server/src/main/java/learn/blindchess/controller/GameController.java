@@ -29,7 +29,7 @@ public class GameController {
     public ResponseEntity<?> createGame(
             @AuthenticationPrincipal Authentication authentication,
             @Valid @RequestBody GameRequestDto requestDto
-            ) throws DataAccessException {
+    ) throws DataAccessException {
 
         Integer userId = null;
 
@@ -67,6 +67,30 @@ public class GameController {
         }
 
         return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/{gameId}/resign")
+    public ResponseEntity<?> resignGame(
+            @AuthenticationPrincipal Authentication authentication,
+            @PathVariable int gameId
+    ) throws DataAccessException {
+
+        Integer userId = null;
+// todo: authorize user
+        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
+            userId = id;
+        }
+
+        Game gameFound = service.findById(gameId);
+
+        if (gameFound == null) {
+            return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
+        }
+
+        boolean result = service.resign(gameFound);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+
     }
 
 }

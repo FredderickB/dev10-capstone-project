@@ -7,13 +7,14 @@ import BoardActions from '../BoardActions';
 import PlayerActions from '../PlayerActions';
 
 import { useAuth } from '../AuthContext';
-import { fetchGame } from '../../services/GameApi';
+import { fetchGame, sendResignation } from '../../services/GameApi';
 import { sendMove } from '../../services/MoveApi';
 import { normalizeSan } from '../../utils/sanNormalizer';
 
 import type { GameResponseDto } from '../../services/utils/DTOs/GameDtos';
 import type { MoveRequestDto } from '../../services/utils/DTOs/MoveDtos';
 import MoveResponseContainer from '../MoveResponseContainer';
+import { getColorToMove, getMoveNumber } from '../../utils/fenUtils';
 
 interface GamePageState {
   viewBoard: boolean;
@@ -73,6 +74,24 @@ export default function GamePage() {
       playSan: san,
     }));
   };
+
+  const handleResign = async () => {
+
+    const result = await sendResignation(token, gameState.gameId)
+
+    if (!result.success) {
+      setGameState((prev) => ({
+        ...prev,
+        errors: result.errors ?? ['Failed to execute move'],
+      }));
+    } else {
+      setGameState((prev) => ({
+        ...prev,
+        gameStatus: "RESIGN"
+      }));
+    }
+
+  }
 
   const handleMoveSubmission = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -157,65 +176,37 @@ export default function GamePage() {
     }
 
     loadGame();
-  }, [rawGameId, token]);
+  }, [rawGameId, token, gameState.gameStatus]);
 
   return (
     <div>
       {gameState.viewBoard ? (
-        <Board fen={gameState.fen} />
+        <Board fen={gameState.fen} playerColor={gameState.gameDto?.playerColor}/>
       ) : (
         <p>[ board hidden ]</p>
       )}
 
-      <BoardActions
-        boardToggle={handleBoardToggle}
-        infoToggle={handleInfoToggle}
-        handleInputChange={handleInputChange}
-        handleMoveSubmission={handleMoveSubmission}
-        playerSan={gameState.playSan}
-      />
+        <BoardActions
+          boardToggle={handleBoardToggle}
+          infoToggle={handleInfoToggle}
+          handleInputChange={handleInputChange}
+          handleMoveSubmission={handleMoveSubmission}
+          playerSan={gameState.playSan}
+          gameStatus={gameState.gameStatus}
+        />
 
       {gameState.viewInfo ? (
         <MatchInfo
-        moveNumber={gameState.moveNumber}
-        moveColor={gameState.colorToMove}
-        moveList={gameState.moveList}
-      />
+          moveNumber={gameState.moveNumber}
+          moveColor={gameState.colorToMove}
+          moveList={gameState.moveList}
+        />
       ) : (
         <p>[ match info hidden ]</p>
       )}
-      
+
       <MoveResponseContainer errors={gameState.errors} engineResponse={gameState.engineSan} gameStatus={gameState.gameStatus} />
-      <PlayerActions />
+      <PlayerActions handleResign={handleResign} gameStatus={gameState.gameStatus}/>
     </div>
   );
-}
-
-function getColorToMove(fen: string | undefined): string | null {
-  if (!fen) return null;
-  const parts = fen.trim().split(/\s+/);
-  if (parts.length < 2) return null;
-
-  const activeColor = parts[1].toLowerCase();
-
-  if (activeColor === 'w') {
-    return 'white';
-  }
-
-  if (activeColor === 'b') {
-    return 'black';
-  }
-
-  return null;
-}
-
-function getMoveNumber(fen: string | undefined): number | undefined {
-  if (!fen) return undefined;
-  const parts = fen.trim().split(/\s+/);
-  if (parts.length < 5) return undefined;
-
-  const moveNumber =  parseInt(parts[5]);
-  console.log(moveNumber)
-
-  return moveNumber;
 }
