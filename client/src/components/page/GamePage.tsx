@@ -1,129 +1,221 @@
-import React, { useEffect, useState, type ChangeEvent, type FormEventHandler, type FormEvent } from 'react'
-import Board from '../Board'
-import MatchInfo from '../MatchInfo'
-import BoardActions from '../BoardActions'
-import PlayerActions from '../PlayerActions'
-import { useParams } from 'react-router-dom'
-import { useAuth } from '../AuthContext'
-import { fetchGame } from '../../services/GameApi'
-import type { GameResponseDto } from '../../services/utils/DTOs/GameDtos'
-import type { MoveRequestDto } from '../../services/utils/DTOs/MoveDtos'
-import { sendMove } from '../../services/MoveApi'
-import { normalizeSan } from '../../utils/sanNormalizer'
+import React, { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
+
+import Board from '../Board';
+import MatchInfo from '../MatchInfo';
+import BoardActions from '../BoardActions';
+import PlayerActions from '../PlayerActions';
+
+import { useAuth } from '../AuthContext';
+import { fetchGame } from '../../services/GameApi';
+import { sendMove } from '../../services/MoveApi';
+import { normalizeSan } from '../../utils/sanNormalizer';
+
+import type { GameResponseDto } from '../../services/utils/DTOs/GameDtos';
+import type { MoveRequestDto } from '../../services/utils/DTOs/MoveDtos';
+import MoveResponseContainer from '../MoveResponseContainer';
+
+interface GamePageState {
+  viewBoard: boolean;
+  viewInfo: boolean;
+  errors: string[];
+  gameId: number;
+  gameDto: GameResponseDto | null;
+  fen: string | undefined;
+  playSan: string;
+  engineSan: string | undefined;
+  peakedAtBoard: boolean;
+  moveNumber: number | undefined;
+  gameStatus: string;
+  colorToMove: string;
+  moveList: string[];
+}
 
 export default function GamePage() {
-
-  const [viewBoard, setViewBoard] = useState<boolean>(false)
-  const [errors, setErrors] = useState<string[]>([])
-  const { gameId } = useParams();
+  const { gameId: rawGameId } = useParams<{ gameId: string }>();
   const { token } = useAuth();
 
+  const [gameState, setGameState] = useState<GamePageState>({
+    viewBoard: false,
+    viewInfo: false,
+    errors: [],
+    gameId: 0,
+    gameDto: null,
+    fen: undefined,
+    playSan: '',
+    engineSan: undefined,
+    peakedAtBoard: false,
+    moveNumber: 1,
+    gameStatus: 'IN_PROGRESS',
+    colorToMove: 'white',
+    moveList: [],
+  });
 
-  const [game, setGame] = useState<GameResponseDto | null>(null);
-  const [playerSan, setPlayerSan] = useState<string>("");
-  const [engineSan, setEngineSan] = useState<string | undefined>("");
-  const [moveNumber, setMoveNumber] = useState<number>(1);
-  const [peakedAtBoard, setPeakedAtBoard] = useState<boolean>(false);
-  const [fen, setFen] = useState<string | undefined>(game?.fen);
-  const [gameStatus, setGameStatus] = useState()
+  const handleBoardToggle = () => {
+    setGameState((prev) => ({
+      ...prev,
+      viewBoard: !prev.viewBoard,
+      peakedAtBoard: true,
+    }));
+  };
 
-  function handleBoardToggle() {
+  const handleInfoToggle = () => {
+    setGameState((prev) => ({
+      ...prev,
+      viewInfo: !prev.viewInfo,
+    }));
+  };
 
-    let currentView = viewBoard;
-    setViewBoard(!currentView);
-    setPeakedAtBoard(true);
-
-  }
-
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const san = normalizeSan(event.target.value);
-    setPlayerSan(san)
-  }
+    setGameState((prev) => ({
+      ...prev,
+      playSan: san,
+    }));
+  };
 
   const handleMoveSubmission = async (event: FormEvent<HTMLFormElement>) => {
-
     event.preventDefault();
 
-    if (!gameId) {
-      console.log("gameId undefined");
-      return;
-    }
-    const parsedGameId = parseInt(gameId, 10);
+    const { gameId, gameDto, fen, moveNumber, playSan, peakedAtBoard } = gameState;
 
-    if (!game) {
-      console.log("game undefined");
+    if (!gameId || !gameDto || !fen || !moveNumber) {
+      console.log('Missing game context for submission');
       return;
-    }
-
-    if (!fen) {
-      console.log("fen not defined")
-      return
     }
 
     const dto: MoveRequestDto = {
-      gameId: parsedGameId,
-      moveNumber: moveNumber,
-      playerSan: playerSan,
-      engineLevel: game.engineLevel,
+      gameId,
+      moveNumber,
+      playerSan: playSan,
+      engineLevel: gameDto.engineLevel,
       currentFen: fen,
-      peakedAtBoard: peakedAtBoard
+      peakedAtBoard,
     };
 
     const result = await sendMove(token, dto);
 
     if (!result.success) {
-      setErrors(result.errors)
+      setGameState((prev) => ({
+        ...prev,
+        errors: result.errors ?? ['Failed to execute move'],
+      }));
     } else if (result.data) {
-      setErrors([])
-      setMoveNumber(result.data.moveNumber + 1);
-      setEngineSan(result.data.engineSan)
-      setFen(result.data.updatedFen)
-      setGameStatus(gameStatus)
-    }
-    setPlayerSan("");
-    setPeakedAtBoard(false);
-    setViewBoard(false);
+      const updatedFen = result.data.updatedFen;
+      const nextColor = getColorToMove(updatedFen) ?? 'white';
+      const moveNum = getMoveNumber(updatedFen) ?? 1;
 
-  }
+      setGameState((prev) => ({
+        ...prev,
+        errors: [],
+        moveNumber: moveNum,
+        engineSan: result.data?.engineSan,
+        fen: updatedFen,
+        colorToMove: nextColor,
+        playSan: '',
+        peakedAtBoard: false,
+        viewBoard: false,
+        moveList: [...prev.moveList, playSan, ...(result.data?.engineSan ? [result.data.engineSan] : [])],
+      }));
+    }
+  };
 
   useEffect(() => {
-
     async function loadGame() {
+      if (!rawGameId) return;
 
-      if (!gameId) return;
-
-      const parsedGameId = parseInt(gameId, 10);
+      const parsedGameId = parseInt(rawGameId, 10);
       if (isNaN(parsedGameId)) {
-        setErrors(['Invalid Game ID']);
+        setGameState((prev) => ({
+          ...prev,
+          errors: ['Invalid Game ID'],
+        }));
         return;
       }
 
       const result = await fetchGame(token, parsedGameId);
 
-      if (result.success) {
-        setGame(result.data);
-        setFen(result.data?.fen);
+      if (result.success && result.data) {
+        const initialFen = result.data.fen;
+        const moveNum = getMoveNumber(initialFen) ?? 1;
+        setGameState((prev) => ({
+          ...prev,
+          moveNumber: moveNum,
+          gameId: parsedGameId,
+          gameDto: result.data,
+          fen: initialFen,
+          gameStatus: result.data?.status ?? 'IN_PROGRESS',
+          colorToMove: getColorToMove(initialFen) ?? 'white',
+          errors: [],
+        }));
       } else {
-        setErrors(result.errors);
+        setGameState((prev) => ({
+          ...prev,
+          errors: result.errors ?? ['Failed to load game'],
+        }));
       }
-
     }
 
     loadGame();
-  }, [gameId, token])
+  }, [rawGameId, token]);
 
   return (
-
     <div>
-      {viewBoard ? (
-        <Board fen={fen} />
+      {gameState.viewBoard ? (
+        <Board fen={gameState.fen} />
       ) : (
         <p>[ board hidden ]</p>
       )}
-      <BoardActions boardToggle={handleBoardToggle} handleInputChange={handleInputChange} handleMoveSubmmission={handleMoveSubmission} playerSan={playerSan} />
-      <MatchInfo errors={errors} engineResponse={engineSan} gameStatus={game?.status} />
+
+      <BoardActions
+        boardToggle={handleBoardToggle}
+        infoToggle={handleInfoToggle}
+        handleInputChange={handleInputChange}
+        handleMoveSubmission={handleMoveSubmission}
+        playerSan={gameState.playSan}
+      />
+
+      {gameState.viewInfo ? (
+        <MatchInfo
+        moveNumber={gameState.moveNumber}
+        moveColor={gameState.colorToMove}
+        moveList={gameState.moveList}
+      />
+      ) : (
+        <p>[ match info hidden ]</p>
+      )}
+      
+      <MoveResponseContainer errors={gameState.errors} engineResponse={gameState.engineSan} gameStatus={gameState.gameStatus} />
       <PlayerActions />
     </div>
-
   );
+}
+
+function getColorToMove(fen: string | undefined): string | null {
+  if (!fen) return null;
+  const parts = fen.trim().split(/\s+/);
+  if (parts.length < 2) return null;
+
+  const activeColor = parts[1].toLowerCase();
+
+  if (activeColor === 'w') {
+    return 'white';
+  }
+
+  if (activeColor === 'b') {
+    return 'black';
+  }
+
+  return null;
+}
+
+function getMoveNumber(fen: string | undefined): number | undefined {
+  if (!fen) return undefined;
+  const parts = fen.trim().split(/\s+/);
+  if (parts.length < 5) return undefined;
+
+  const moveNumber =  parseInt(parts[5]);
+  console.log(moveNumber)
+
+  return moveNumber;
 }
