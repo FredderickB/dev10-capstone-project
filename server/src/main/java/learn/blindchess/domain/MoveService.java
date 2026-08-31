@@ -79,6 +79,11 @@ public class MoveService {
 
 
         updatedGame.setFen(finalFen);
+
+        if (moveRequestDto.peakedAtBoard()) {
+            updatedGame.setBoardPeaks(updatedGame.getBoardPeaks() + 1);
+        }
+
         gameService.update(updatedGame);
 
         FullTurnDto turnDto = new FullTurnDto(

@@ -22,7 +22,7 @@ export default function GamePage() {
   const [game, setGame] = useState<GameResponseDto | null>(null);
   const [playerSan, setPlayerSan] = useState<string>("");
   const [engineSan, setEngineSan] = useState<string | undefined>("");
-  const [moveNumber, setMoveNumber] = useState<number>(0);
+  const [moveNumber, setMoveNumber] = useState<number>(1);
   const [peakedAtBoard, setPeakedAtBoard] = useState<boolean>(false);
   const [fen, setFen] = useState<string | undefined>(game?.fen);
   const [gameStatus, setGameStatus] = useState()
@@ -75,11 +75,14 @@ export default function GamePage() {
       setErrors(result.errors)
     } else if (result.data) {
       setErrors([])
+      setMoveNumber(result.data.moveNumber + 1);
       setEngineSan(result.data.engineSan)
       setFen(result.data.updatedFen)
       setGameStatus(gameStatus)
     }
-    setPlayerSan("")
+    setPlayerSan("");
+    setPeakedAtBoard(false);
+    setViewBoard(false);
 
   }
 
@@ -107,7 +110,7 @@ export default function GamePage() {
     }
 
     loadGame();
-  }, [gameId, fen])
+  }, [gameId, token])
 
   return (
 

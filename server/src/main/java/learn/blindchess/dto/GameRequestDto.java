@@ -10,7 +10,7 @@ public record GameRequestDto (
     @Pattern(regexp = "^(?i)(WHITE|BLACK|RANDOM)$", message = "Player color must be WHITE, BLACK, or RANDOM.")
     String playerColor,
 
-    @Min(value = 400, message = "Engine level must be at least 400.")
+    @Min(value = 100, message = "Engine level must be at least 100.")
     @Max(value = 2500, message = "Engine level cannot exceed 2500.")
     int engineLevel){
 
