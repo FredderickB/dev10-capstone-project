@@ -21,10 +21,12 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final MoveService moveService;
 
-    public GameService(GameRepository gameRepository, UserRepository userRepository) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, MoveService moveService) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
+        this.moveService = moveService;
     }
 
     public Game findById(int gameId) throws DataAccessException {
@@ -38,7 +40,17 @@ public class GameService {
 
         if (result.isSuccess()) {
             Game game = makeNewGame(userId, gameRequestDto);
+
             game = gameRepository.create(game);
+
+            if (game.getPlayerColor() == BLACK) {
+                String[] fishResult = moveService.makeStockFishMove(game.getFen(), game.getEngineLevel());
+                game.setFen(fishResult[0]);
+                update(game);
+                moveService.saveMove(game.getFen(), game.getGameId(), 1, fishResult[1] );
+            }
+
+
             result.setPayload(game);
         }
 

@@ -1,6 +1,7 @@
 package learn.blindchess.domain;
 
 import learn.blindchess.data.DataAccessException;
+import learn.blindchess.data.GameRepository;
 import learn.blindchess.data.MoveRepository;
 import learn.blindchess.dto.FullTurnDto;
 import learn.blindchess.dto.MoveRequestDto;
@@ -13,13 +14,13 @@ import org.springframework.stereotype.Service;
 public class MoveService {
 
     private MoveRepository moveRepository;
-    private GameService gameService;
+    private GameRepository gameRepository;
     private StockFishService stockFishService;
     private ChessLibService chessLibService;
 
-    public MoveService(MoveRepository moveRepository, GameService gameService, StockFishService stockFishService, ChessLibService chessLibService) {
+    public MoveService(MoveRepository moveRepository, GameRepository gameRepository, StockFishService stockFishService, ChessLibService chessLibService) {
         this.moveRepository = moveRepository;
-        this.gameService = gameService;
+        this.gameRepository = gameRepository;
         this.stockFishService = stockFishService;
         this.chessLibService = chessLibService;
     }
@@ -32,7 +33,7 @@ public class MoveService {
         int elo = moveRequestDto.engineLevel();
         String playerSan = moveRequestDto.playerSan();
 
-        Game updatedGame = gameService.findById(moveRequestDto.gameId());
+        Game updatedGame = gameRepository.findById(moveRequestDto.gameId());
 
         if (updatedGame == null) {
             result.addErrorMessage("Game id" + moveRequestDto.gameId() + "not found", ResultType.NOT_FOUND);
@@ -65,10 +66,9 @@ public class MoveService {
             updatedGame.setStatus(gameStatusAfterPlayerMove);
         } else {
 
-            String engineUci = stockFishService.getStockFishMove(fenAfterPlayerMove, elo);
-            engineSan = chessLibService.convertUciToSan(fenAfterPlayerMove, engineUci);
-
-            finalFen = chessLibService.getUpdatedFen(fenAfterPlayerMove, engineSan);
+            String[] fishResult = makeStockFishMove(fenAfterPlayerMove, elo);
+            finalFen = fishResult[0];
+            engineSan = fishResult[1];
 
             GameStatus statusAfterEngineMove = chessLibService.getGameStatus(finalFen);
             if (statusAfterEngineMove != GameStatus.IN_PROGRESS){
@@ -84,7 +84,7 @@ public class MoveService {
             updatedGame.setBoardPeaks(updatedGame.getBoardPeaks() + 1);
         }
 
-        gameService.update(updatedGame);
+        gameRepository.update(updatedGame);
 
         FullTurnDto turnDto = new FullTurnDto(
                 moveRequestDto.gameId(),
@@ -95,28 +95,31 @@ public class MoveService {
                 message
         );
 
-        saveMove(turnDto);
+        saveMove(fenAfterPlayerMove, moveRequestDto.gameId(), moveRequestDto.moveNumber(), playerSan);
+        saveMove(finalFen, moveRequestDto.gameId(), moveRequestDto.moveNumber(), engineSan);
 
         result.setPayload(turnDto);
         return result;
 
     }
 
-    private void saveMove(FullTurnDto fullTurnDto) throws DataAccessException {
+    public String[] makeStockFishMove (String fen, int elo) {
 
-        Move playerMove = new Move();
-        playerMove.setFenAfter(fullTurnDto.updatedFen());
-        playerMove.setGameId(fullTurnDto.gameId());
-        playerMove.setMoveNumber(fullTurnDto.moveNumber()-1);
-        playerMove.setMoveSan(fullTurnDto.playerSan());
-        moveRepository.saveMove(playerMove);
+        String engineUci = stockFishService.getStockFishMove(fen, elo);
+        String engineSan = chessLibService.convertUciToSan(fen, engineUci);
+        String updatedFen = chessLibService.getUpdatedFen(fen, engineSan);
 
-        Move engineMove = new Move();
-        engineMove.setFenAfter(fullTurnDto.updatedFen());
-        engineMove.setGameId(fullTurnDto.gameId());
-        engineMove.setMoveNumber(fullTurnDto.moveNumber()-1);
-        engineMove.setMoveSan(fullTurnDto.engineSan());
-        moveRepository.saveMove(engineMove);
+        return new String[]{updatedFen, engineSan};
+    }
+
+    public void saveMove(String fenAfter, int gameId, int moveNumber, String moveSan) throws DataAccessException {
+
+        Move move = new Move();
+        move.setFenAfter(fenAfter);
+        move.setGameId(gameId);
+        move.setMoveNumber(moveNumber);
+        move.setMoveSan(moveSan);
+        moveRepository.saveMove(move);
 
     }
 
