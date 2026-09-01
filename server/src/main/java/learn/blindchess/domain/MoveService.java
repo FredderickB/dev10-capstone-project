@@ -4,11 +4,15 @@ import learn.blindchess.data.DataAccessException;
 import learn.blindchess.data.GameRepository;
 import learn.blindchess.data.MoveRepository;
 import learn.blindchess.dto.FullTurnDto;
+import learn.blindchess.dto.MoveDto;
 import learn.blindchess.dto.MoveRequestDto;
 import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
 import learn.blindchess.model.Move;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MoveService {
@@ -42,17 +46,17 @@ public class MoveService {
         boolean isLegalMove = chessLibService.isLegalMove(moveRequestDto.playerSan(), currentFen);
 
         if (!isLegalMove) {
-           FullTurnDto errorDto = new FullTurnDto(
-                   moveRequestDto.gameId(),
-                   moveRequestDto.moveNumber(),
-                   currentFen,
-                   playerSan,
-                   null,
-                   "Illegal Move Attempted."
-           );
-           result.addErrorMessage("Proposed Move not legal in current position.", ResultType.INVALID);
-           result.setPayload(errorDto);
-           return result;
+            FullTurnDto errorDto = new FullTurnDto(
+                    moveRequestDto.gameId(),
+                    moveRequestDto.moveNumber(),
+                    currentFen,
+                    playerSan,
+                    null,
+                    "Illegal Move Attempted."
+            );
+            result.addErrorMessage("Proposed Move not legal in current position.", ResultType.INVALID);
+            result.setPayload(errorDto);
+            return result;
         }
 
         String fenAfterPlayerMove = chessLibService.getUpdatedFen(currentFen, playerSan);
@@ -71,7 +75,7 @@ public class MoveService {
             engineSan = fishResult[1];
 
             GameStatus statusAfterEngineMove = chessLibService.getGameStatus(finalFen);
-            if (statusAfterEngineMove != GameStatus.IN_PROGRESS){
+            if (statusAfterEngineMove != GameStatus.IN_PROGRESS) {
                 message = formatGameEndMessage(statusAfterEngineMove);
                 updatedGame.setStatus(statusAfterEngineMove);
             }
@@ -103,7 +107,21 @@ public class MoveService {
 
     }
 
-    public String[] makeStockFishMove (String fen, int elo) {
+    public List<MoveDto> getMovesByGameId(int gameId) throws DataAccessException {
+
+        List<Move> moveList = moveRepository.getMovesByGameId(gameId);
+
+        List<MoveDto> moveDtoList = new ArrayList<>();
+
+        moveList.stream().forEach((move -> {
+            MoveDto moveDto = new MoveDto(move.getMoveNumber(), move.getMoveSan(), move.getFenAfter());
+            moveDtoList.add(moveDto);
+        }));
+
+        return moveDtoList;
+    }
+
+    public String[] makeStockFishMove(String fen, int elo) {
 
         String engineUci = stockFishService.getStockFishMove(fen, elo);
         String engineSan = chessLibService.convertUciToSan(fen, engineUci);
