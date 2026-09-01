@@ -1,4 +1,4 @@
-import { AuthProvider } from './components/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
 import AppRouter from './components/AppRouter'
 
 
