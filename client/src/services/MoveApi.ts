@@ -15,7 +15,7 @@ export async function sendMove(jwtToken: string | null, moveRequest: MoveRequest
   const config = {
     method: 'POST',
     headers: {
-      'Authorization': jwtToken,
+      'Authorization': `Bearer ${jwtToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(moveRequest),
@@ -35,7 +35,7 @@ export async function fetchGameMoves(jwtToken: string | null, gameId: number): P
   const config = {
     method: 'GET',
     headers: {
-      'Authorization': jwtToken,
+      'Authorization': `Bearer ${jwtToken}`,
     },
   }
 

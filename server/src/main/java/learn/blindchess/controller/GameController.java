@@ -30,15 +30,9 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<?> createGame(
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal Integer userId,
             @Valid @RequestBody GameRequestDto requestDto
     ) throws DataAccessException {
-
-        Integer userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
 
         Result<Game> result = service.create(userId, requestDto);
 
@@ -53,16 +47,10 @@ public class GameController {
 
     @GetMapping("/{gameId}")
     public ResponseEntity<?> getGame(
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal Integer userId,
             @PathVariable int gameId) throws DataAccessException {
 
-        Integer userId = null;
-
         // todo: authorize user
-
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
 
         Game gameFound = service.findById(gameId);
 
@@ -76,19 +64,13 @@ public class GameController {
 
     @GetMapping()
     public ResponseEntity<?> getAllGames(
-            @AuthenticationPrincipal Authentication authentication,
-            @PathVariable int gameId) throws DataAccessException {
-
-        Integer userId = null;
+            @AuthenticationPrincipal Integer userId
+            ) throws DataAccessException {
 
         // todo: authorize user
 
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
-
         if (userId == null) {
-            return new ResponseEntity<>("User Id not in authorization head", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User Id null", HttpStatus.BAD_REQUEST);
         }
 
         List<GameSummaryDto> gamesFound = service.findAllByUserId(userId);

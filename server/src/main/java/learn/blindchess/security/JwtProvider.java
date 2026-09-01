@@ -1,8 +1,10 @@
 package learn.blindchess.security;
 
+import learn.blindchess.model.User;
+
 public interface JwtProvider {
 
-    String generateToken(String email, String username);
+    String generateToken(User user);
 
     boolean validateToken(String token);
 

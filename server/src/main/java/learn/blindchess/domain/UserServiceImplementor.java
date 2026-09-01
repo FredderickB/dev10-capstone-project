@@ -31,9 +31,16 @@ public class UserServiceImplementor implements UserService {
         User existingUser = userRepository.findByEmail(user.getEmail());
 
         if (existingUser != null) {
-            result.setPayload(userRepository.update(user));
+            result.setPayload(existingUser);
         } else {
-            result.setPayload(userRepository.create(user));
+
+            User newUser = userRepository.create(user);
+
+            if (newUser == null || newUser.getUserId() == null) {
+                result.addErrorMessage("Failed to create user in database", ResultType.SERVER_ERROR);
+                return result;
+            }
+            result.setPayload(newUser);
         }
 
         return result;
