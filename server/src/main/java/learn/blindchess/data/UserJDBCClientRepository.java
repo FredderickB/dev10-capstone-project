@@ -68,10 +68,13 @@ public class UserJDBCClientRepository implements UserRepository{
         if (rowsAffected == 0) {
             return null;
         }
+        Number key = keyHolder.getKey();
+        if (key == null) {
+            throw new DataAccessException("Failed to retreive key from database");
+        }
 
-        user.setUserId(keyHolder.getKey().intValue());
+        user.setUserId(key.intValue());
         return user;
-
     }
 
 

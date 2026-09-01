@@ -50,7 +50,8 @@ public class GoogleAuthService {
             return result;
         }
 
-        String appJwt = jwtProvider.generateToken(email, name);
+        User userWithId = userResult.getPayload();
+        String appJwt = jwtProvider.generateToken(userWithId);
         result.setPayload(appJwt);
         return result;
     }
