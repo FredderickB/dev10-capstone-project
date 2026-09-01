@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
+import java.util.List;
 
 @Repository
 public class GameJDBCClientRepository implements GameRepository{
@@ -37,6 +38,32 @@ public class GameJDBCClientRepository implements GameRepository{
                 .param(id)
                 .query(new GameRowMapper())
                 .optional().orElse(null);
+    }
+
+    @Override
+    public List<Game> findAllByUserId(int userId) throws DataAccessException {
+        String sql = """
+                select
+                    g.game_id,
+                    g.user_id,
+                    g.engine_level,
+                    g.fen,
+                    g.status_id,
+                    g.player_color_id,
+                    g.board_peaks,
+                    g.created_at,
+                    u.username,
+                    u.email
+                from game g
+                left join user u on u.user_id = g.user_id
+                join player_color p on p.player_color_id = g.player_color_id
+                where g.user_id = ?;
+                """;
+
+        return client.sql(sql)
+                .param(userId)
+                .query(new GameRowMapper())
+                .list();
     }
 
     public GameJDBCClientRepository(JdbcClient client) {

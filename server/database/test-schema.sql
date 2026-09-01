@@ -10,11 +10,11 @@ create table user (
 
 create table game_status (
 	status_id int primary key auto_increment,
-	status_text varchar(20) not null
+	status_text varchar(50) not null
 );
 
 insert into game_status (status_text) values 
-	("IN_PROGRESS")
+	("IN_PROGRESS"),
 	("WHITE_WIN"),
 	("BLACK_WIN"),
 	("DRAW_INSUFFICIENT_MATERIAL"),
@@ -77,7 +77,7 @@ begin
         ("a@a.com", "a"),
         ("b@b.com", "b");
     insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks, player_color_id) values
-    	(1, 1000, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 4, "2000-01-01 01:01:00", 0, 1);
+    	(1, 1000, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 1, "2000-01-01 01:01:00", 0, 1);
 	insert into move (game_id, move_number, move_san, fen_after) values 
 		(1, 1, "E4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
 end //
