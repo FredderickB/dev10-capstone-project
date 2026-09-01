@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static learn.blindchess.TestHelper.*;
 
@@ -31,6 +33,26 @@ class GameJDBCClientRepositoryTest {
         Game expected = getGameA();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldFindAll() throws DataAccessException {
+
+        List<Game> actual = repository.findAllByUserId(1);
+        List<Game> expected = List.of(getGameA());
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    void shouldNotFindAny() throws DataAccessException {
+
+        List<Game> actual = repository.findAllByUserId(-999);
+        List<Game> expected = List.of();
+
+        assertEquals(expected, actual);
+
     }
 
     @Test

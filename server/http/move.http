@@ -11,3 +11,7 @@ Content-Type: application/json
   "playerSan": "d4",
   "engineLevel": 1500
 }
+
+
+### get all moves from a game
+GET {{base_url}}/1

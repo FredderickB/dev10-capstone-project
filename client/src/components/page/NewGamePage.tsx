@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { createGame } from '../../services/GameApi'
 import ColorSelector from '../ColorSelector'
 import type { GameRequestDto } from '../../services/utils/DTOs/GameDtos'
-import { useAuth } from '../AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 export default function NewGamePage() {
 
@@ -34,7 +34,6 @@ export default function NewGamePage() {
       setErrors(result.errors)
     } else {
 
-      console.log(result.data)
       const gameId = result.data?.gameId
       navigate(`/game/${gameId}`)
     }

@@ -38,30 +38,27 @@ public class GameService {
 
         Result<Game> result = validateGameRequest(gameRequestDto);
 
-        if (result.isSuccess()) {
-            Game game = makeNewGame(userId, gameRequestDto);
-
-            game = gameRepository.create(game);
-
-            if (game.getPlayerColor() == BLACK) {
-                String[] fishResult = moveService.makeStockFishMove(game.getFen(), game.getEngineLevel());
-                game.setFen(fishResult[0]);
-                update(game);
-                moveService.saveMove(game.getFen(), game.getGameId(), 1, fishResult[1] );
-            }
-
-
-            result.setPayload(game);
+        if (!result.isSuccess()) {
+            return result;
         }
 
-        return result;
+        Game game = makeNewGame(userId, gameRequestDto);
+        game = gameRepository.create(game);
 
+        if (game.getPlayerColor() == BLACK) {
+            MoveService.EngineTurnResult engineResult = moveService.runStockfishTurn(game.getFen(), game.getEngineLevel(), 1, game.getGameId());
+            game.setFen(engineResult.finalFen());
+            update(game);
+        }
+        result.setPayload(game);
+
+        return result;
     }
 
-    public boolean resign (Game game) throws DataAccessException {
+    public boolean resign(Game game) throws DataAccessException {
 
         PlayerColor playerColor = game.getPlayerColor();
-        PlayerColor engineColor = playerColor == WHITE? BLACK: WHITE;
+        PlayerColor engineColor = playerColor == WHITE ? BLACK : WHITE;
 
         if (engineColor == WHITE) {
             game.setStatus(GameStatus.WHITE_WIN);

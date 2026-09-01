@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/games/**", "/api/move").permitAll() // todo check jwt for games who dont have null user id
+                        .requestMatchers("/api/auth/**", "/api/games/**", "/api/move/**").permitAll() // todo check jwt for games who dont have null user id
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
