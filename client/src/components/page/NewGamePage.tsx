@@ -34,7 +34,6 @@ export default function NewGamePage() {
       setErrors(result.errors)
     } else {
 
-      console.log(result.data)
       const gameId = result.data?.gameId
       navigate(`/game/${gameId}`)
     }

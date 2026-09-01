@@ -31,6 +31,7 @@ export default function MatchMoveList({moveNumber}: props) {
     }
 
     pgnList = formatMovesToPgn(moveList);
+    console.log(pgnList)
 
     loadMoveList();
   }, [rawGameId, token, moveNumber]);

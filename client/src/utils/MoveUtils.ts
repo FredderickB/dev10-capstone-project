@@ -1,28 +1,21 @@
 import type { Move, PgnTurn } from "../services/utils/DTOs/MoveDtos";
 
-
-
 export function formatMovesToPgn(moves: Move[]): PgnTurn[] {
   if (!moves || moves.length === 0) return [];
 
-  const turnsMap = new Map<number, PgnTurn>();
+  const pgn: PgnTurn[] = [];
 
-  moves.forEach((move) => {
-    const fenParts = move.fenAfter.trim().split(/\s+/);
-    const nextColorToMove = fenParts[1]?.toLowerCase();
-    const isWhiteMove = nextColorToMove === 'b';
-    const turnNumber = move.moveNumber;
+  for (let i = 0; i < moves.length; i += 2) {
+    const white = moves[i];
+    const black = moves[i+1];
 
-    const existingTurn: PgnTurn = turnsMap.get(turnNumber) ?? { turnNumber };
+    pgn.push({
+      turnNumber: Math.floor(i/2) + 1,
+      whiteMove: white ? white.moveSan : '',
+      blackMove: black ? black.moveSan : '...'
+    })
+  }
 
-    if (isWhiteMove) {
-      existingTurn.whiteMove = move.moveSan;
-    } else {
-      existingTurn.blackMove = move.moveSan;
-    }
+  return pgn;
 
-    turnsMap.set(turnNumber, existingTurn);
-  });
-
-  return Array.from(turnsMap.values()).sort((a, b) => a.turnNumber - b.turnNumber);
 }

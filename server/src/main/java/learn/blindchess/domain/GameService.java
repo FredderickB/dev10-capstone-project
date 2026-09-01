@@ -49,7 +49,6 @@ public class GameService {
             MoveService.EngineTurnResult engineResult = moveService.runStockfishTurn(game.getFen(), game.getEngineLevel(), 1, game.getGameId());
             game.setFen(engineResult.finalFen());
             update(game);
-            moveService.saveMove(game.getFen(), game.getGameId(), 1, engineResult.san());
         }
         result.setPayload(game);
 
