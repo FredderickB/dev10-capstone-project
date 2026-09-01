@@ -9,12 +9,11 @@ export default function ProfilePage() {
   const { token } = useAuth();
   const { profileState } = useProfileState(token);
 
-  
+
   return (
     <>
-      <div>ProfilePage</div>
-      <UserStats />
-      <GamesTable />
+    <h3>Hello user</h3>
+      <GamesTable games={profileState.games}/>
     </>
   )
 }
