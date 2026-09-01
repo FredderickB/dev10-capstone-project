@@ -1,5 +1,8 @@
 import React from 'react'
 import type { GameSummaryDto } from '../services/utils/DTOs/GameDtos'
+import { formatDate } from '../utils/DateUtils'
+import { Link } from 'react-router-dom'
+import DeleteButton from './DeleteButton'
 
 interface props {
   games: GameSummaryDto[] | null
@@ -29,14 +32,19 @@ export default function GamesTable({ games }: props) {
       <tbody>
         {games.map((game) => (
           <tr key={game.gameId}>
-            <td>{game.createdAt ? new Date(game.createdAt).toLocaleDateString() : 'N/A'}</td>
+            <td>{formatDate(game.createdAt)}</td>
             <td>{game.engineLevel}</td>
             <td>{game.playerColor}</td>
             <td>{game.boardPeaks}</td>
             <td>{game.status}</td>
             <td>{game.totalMoves}</td>
+            <td>{game.status === 'IN_PROGRESS' ?
+              <Link to={`/game/${game.gameId}`}>continue</Link>
+              :
+              <DeleteButton gameId={game.gameId}/>
+            }</td>
           </tr>
-        ))}
+        )).toReversed()}
       </tbody>
     </table>
   )
