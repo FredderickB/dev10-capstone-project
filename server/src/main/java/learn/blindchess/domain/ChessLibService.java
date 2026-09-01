@@ -84,7 +84,7 @@ public class ChessLibService {
         Board board = new Board();
         board.loadFromFen(fen);
 
-        return board.getHalfMoveCounter();
+        return board.getMoveCounter();
     }
 
     public GameStatus getGameStatus (String fen) {

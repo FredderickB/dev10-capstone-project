@@ -5,6 +5,7 @@ import learn.blindchess.data.DataAccessException;
 import learn.blindchess.data.GameRepository;
 import learn.blindchess.data.UserRepository;
 import learn.blindchess.dto.GameRequestDto;
+import learn.blindchess.dto.GameSummaryDto;
 import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
 import learn.blindchess.model.PlayerColor;
@@ -12,6 +13,8 @@ import learn.blindchess.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static learn.blindchess.model.PlayerColor.BLACK;
 import static learn.blindchess.model.PlayerColor.WHITE;
@@ -21,17 +24,31 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final ChessLibService chessLibService;
     private final MoveService moveService;
 
-    public GameService(GameRepository gameRepository, UserRepository userRepository, MoveService moveService) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, ChessLibService chessLibService, MoveService moveService) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
+        this.chessLibService = chessLibService;
         this.moveService = moveService;
     }
 
     public Game findById(int gameId) throws DataAccessException {
 
         return gameRepository.findById(gameId);
+    }
+
+    public List<GameSummaryDto> findAllByUserId(int userId) throws DataAccessException {
+        List<Game> gameList = gameRepository.findAllByUserId(userId);
+        List<GameSummaryDto> gameSummaryDtoList = new ArrayList<>();
+
+        for (Game game: gameList) {
+        int moveCount = chessLibService.getMoveNumber(game.getFen());
+            gameSummaryDtoList.add(new GameSummaryDto(game, moveCount));
+        }
+
+        return gameSummaryDtoList;
     }
 
     public Result<Game> create(Integer userId, GameRequestDto gameRequestDto) throws DataAccessException {

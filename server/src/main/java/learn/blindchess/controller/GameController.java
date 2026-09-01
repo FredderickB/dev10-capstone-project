@@ -6,12 +6,15 @@ import learn.blindchess.domain.GameService;
 import learn.blindchess.domain.Result;
 import learn.blindchess.dto.GameRequestDto;
 import learn.blindchess.dto.GameResponseDto;
+import learn.blindchess.dto.GameSummaryDto;
 import learn.blindchess.model.Game;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static learn.blindchess.controller.ErrorResponse.build;
 
@@ -54,7 +57,9 @@ public class GameController {
             @PathVariable int gameId) throws DataAccessException {
 
         Integer userId = null;
-// todo: authorize user
+
+        // todo: authorize user
+
         if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
             userId = id;
         }
@@ -69,6 +74,32 @@ public class GameController {
         return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getAllGames(
+            @AuthenticationPrincipal Authentication authentication,
+            @PathVariable int gameId) throws DataAccessException {
+
+        Integer userId = null;
+
+        // todo: authorize user
+
+        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
+            userId = id;
+        }
+
+        if (userId == null) {
+            return new ResponseEntity<>("User Id not in authorization head", HttpStatus.BAD_REQUEST);
+        }
+
+        List<GameSummaryDto> gamesFound = service.findAllByUserId(userId);
+
+        if (gamesFound != null) {
+            return new ResponseEntity<>(gamesFound, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("games not found", HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("/{gameId}/resign")
     public ResponseEntity<?> resignGame(
             @AuthenticationPrincipal Authentication authentication,
@@ -76,7 +107,9 @@ public class GameController {
     ) throws DataAccessException {
 
         Integer userId = null;
-// todo: authorize user
+
+        // todo: authorize user
+
         if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
             userId = id;
         }
@@ -89,8 +122,6 @@ public class GameController {
 
         boolean result = service.resign(gameFound);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-
     }
 
 }
