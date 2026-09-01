@@ -1,6 +1,6 @@
 import React from 'react'
 import { GoogleLoginButton } from '../GoogleLoginButton'
-import { useAuth } from '../AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { Link } from 'react-router-dom'
 
 export default function Landing() {

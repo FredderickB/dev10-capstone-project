@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { useAuth } from './AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Layout() {
 
@@ -13,11 +13,19 @@ export default function Layout() {
             </NavLink>
             <ul>
                 {token ?
-                    <li>
-                        <NavLink to='profile'>
-                            Profile
-                        </NavLink>
-                    </li> :
+                    <>
+                        <li>
+                            <NavLink to='profile'>
+                                Profile
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='logout'>
+                                Log Out
+                            </NavLink>
+                        </li>
+                    </>
+                    :
                     null}
             </ul>
             <Outlet />

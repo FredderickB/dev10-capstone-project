@@ -43,13 +43,16 @@ public class JwtProviderImplementor implements JwtProvider {
     }
 
     @Override
-    public String getEmailFromToken(String token) {
+    public Integer getIntFromToken(String token) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        return Jwts.parser()
+
+        String subject = Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+
+        return subject != null? Integer.parseInt(subject) : null;
     }
 }

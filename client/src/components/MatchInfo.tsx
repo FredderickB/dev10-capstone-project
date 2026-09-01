@@ -1,14 +1,17 @@
 import React from 'react'
-import MatchStatus from './MatchStatus'
 import MatchMoveList from './MatchMoveList'
-import MoveResponseContainer from './MoveResponseContainer'
+interface props {
+  moveColor: string
+  moveNumber: number | undefined
 
-export default function MatchInfo() {
+}
+export default function MatchInfo({ moveColor, moveNumber}: props) {
   return (
     <div>
-      <MatchStatus />
-      <MatchMoveList />
-      <MoveResponseContainer />
+      <div>
+        {moveColor} to move | move number: {moveNumber}
+      </div>
+      <MatchMoveList moveNumber={moveNumber}/>
     </div>
   )
 }

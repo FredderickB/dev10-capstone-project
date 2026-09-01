@@ -1,0 +1,17 @@
+@base_url = http://localhost:8080/api/move
+
+### Play a Move (e4 in starting position)
+POST {{base_url}}
+Content-Type: application/json
+
+{
+  "gameId": 1,
+  "moveNumber": 0,
+  "currentFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "playerSan": "d4",
+  "engineLevel": 1500
+}
+
+
+### get all moves from a game
+GET {{base_url}}/1

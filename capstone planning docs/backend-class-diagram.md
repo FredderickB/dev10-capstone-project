@@ -111,13 +111,26 @@ classDiagram
 
     %% --- DATA MODELS & DTOS ---
     class Game {
-        +String id
-        +String userId
+        +int id
+        +int userId
         +int engineLevel
         +int boardPeaks
+        +PlayerColor color
         +String fen
-        +String status
+        +GameStatus status
         +LocalDateTime createdAt
+    }
+
+    class GameStatus {
+        +WHITE_WIN,
+        +BLACK_WIN,
+        +DRAW,
+        +IN_PROGRESS;
+    }
+
+    class PlayerColor {
+        +WHITE
+        +BLACK
     }
 
     class Move {
@@ -129,14 +142,13 @@ classDiagram
     }
 
     class User {
-        +String id
+        +int id
         +String email
-        +String googleId
-        +Timestamp createdAt
+        +String username
     }
 
     class UserMetricsDto {
-        +Long Userid
+        +Long userId
         +int totalGamesPlayed
         +float whiteWinRate
         +float blackWinRate
@@ -154,18 +166,17 @@ classDiagram
     }
 
     class GameResponseDto {
-        +String gameId
-        +String userId
+        +int gameId
         +int engineLevel
         +int boardPeaks
         +String fen
         +String status
-        +String winner
-        +LocalDateTime createdAt
+        +String PlayerColor
     }
 
     class GameRequestDto {
         +int engineLevel
+        +PlayerColor color
     }
 
     class GameSummaryDto {
@@ -173,7 +184,7 @@ classDiagram
         +int engineLevel
         +int boardPeaks
         +String status
-        +String winner
+        +String PlayerColor
         +int totalMoves
         +LocalDateTime createdAt
     }
@@ -211,6 +222,9 @@ classDiagram
     GameRepository ..> Game : manages
     MoveRepository ..> Move : manages
     UserRepository ..> User : manages
+
+    Game --> PlayerColor
+    Game --> GameStatus
 
     UserService ..> UserMetricsDto: produces
     

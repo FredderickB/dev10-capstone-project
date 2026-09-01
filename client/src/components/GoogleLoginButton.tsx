@@ -1,20 +1,19 @@
 import { GoogleLogin } from '@react-oauth/google';
 import type { CredentialResponse } from '@react-oauth/google';
 import { useState } from 'react';
+import { fetchJwt } from '../services/AuthApi';
+import { useAuth } from '../contexts/AuthContext';
 
-interface GoogleLoginButtonProps {
-  onLoginSuccess?: (appJwt: string) => void;
-}
-
-export const GoogleLoginButton = ({ onLoginSuccess }: GoogleLoginButtonProps) => {
+export const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string[] | null>(null);
+  const { token, setToken } = useAuth();
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     const idToken = credentialResponse.credential;
 
     if (!idToken) {
-      setError('Google login failed: No credential returned');
+      setError(['Google login failed: No credential returned']);
       return;
     }
 
@@ -22,26 +21,19 @@ export const GoogleLoginButton = ({ onLoginSuccess }: GoogleLoginButtonProps) =>
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/google/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idToken }),
-      });
+      const result = await fetchJwt(idToken);
 
-      if (!response.ok) {
-        throw new Error(`Backend authentication failed: ${response.status}`);
+      if (!result.success) {
+        setError(result.errors)
+      } else {
+        
+        const appJwt = result.data?.token;
+        if (appJwt) {
+          setToken(appJwt);
+        }
+
       }
 
-      const data = await response.json();
-      const appJwt = data.token;
-
-      localStorage.setItem('token', appJwt);
-
-      if (onLoginSuccess) {
-        onLoginSuccess(appJwt);
-      }
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.message || 'Failed to authenticate');
@@ -51,7 +43,7 @@ export const GoogleLoginButton = ({ onLoginSuccess }: GoogleLoginButtonProps) =>
   };
 
   const handleGoogleFailure = () => {
-    setError('Google Sign-In was cancelled or failed.');
+    setError(['Google Sign-In was cancelled or failed.']);
   };
 
   return (

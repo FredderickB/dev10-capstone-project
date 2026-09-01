@@ -1,9 +1,13 @@
 import { Chessboard } from 'react-chessboard';
 import { useState } from 'react';
 
-export default function Board() {
+interface props {
+  fen: string | undefined;
+  playerColor: string | undefined;
+}
+export default function Board({ fen, playerColor }:props) {
 
-  const [fen] = useState('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+  const resolvedPlayerColor = playerColor === "WHITE"? "white": "black";
 
   return (
     <div style={{ width: '500px' }}>
@@ -11,6 +15,7 @@ export default function Board() {
         options={{
           position: fen,
           allowDragging: false,
+          boardOrientation: resolvedPlayerColor
         }}
       />
     </div>
