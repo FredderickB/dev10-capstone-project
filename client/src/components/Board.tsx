@@ -7,8 +7,6 @@ interface props {
 }
 export default function Board({ fen, playerColor }:props) {
 
-  const [ viewBoard, setViewBoard ] = useState<boolean>(false)
-
   const resolvedPlayerColor = playerColor === "WHITE"? "white": "black";
 
   return (

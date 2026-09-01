@@ -12,7 +12,7 @@ import { sendMove } from '../../services/MoveApi';
 import { normalizeSan } from '../../utils/sanNormalizer';
 
 import type { GameResponseDto } from '../../services/utils/DTOs/GameDtos';
-import type { MoveRequestDto } from '../../services/utils/DTOs/MoveDtos';
+import type { Move, MoveRequestDto } from '../../services/utils/DTOs/MoveDtos';
 import MoveResponseContainer from '../MoveResponseContainer';
 import { getColorToMove, getMoveNumber } from '../../utils/fenUtils';
 
@@ -29,7 +29,6 @@ interface GamePageState {
   moveNumber: number | undefined;
   gameStatus: string;
   colorToMove: string;
-  moveList: string[];
 }
 
 export default function GamePage() {
@@ -49,7 +48,6 @@ export default function GamePage() {
     moveNumber: 1,
     gameStatus: 'IN_PROGRESS',
     colorToMove: 'white',
-    moveList: [],
   });
 
   const handleBoardToggle = () => {
@@ -134,7 +132,6 @@ export default function GamePage() {
         playSan: '',
         peakedAtBoard: false,
         viewBoard: false,
-        moveList: [...prev.moveList, playSan, ...(result.data?.engineSan ? [result.data.engineSan] : [])],
       }));
     }
   };
@@ -199,7 +196,6 @@ export default function GamePage() {
         <MatchInfo
           moveNumber={gameState.moveNumber}
           moveColor={gameState.colorToMove}
-          moveList={gameState.moveList}
         />
       ) : (
         <p>[ match info hidden ]</p>

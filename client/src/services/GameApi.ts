@@ -35,7 +35,6 @@ export async function fetchGame(jwtToken: string | null, gameId: number): Promis
     method: 'GET',
     headers: {
       'Authorization': jwtToken,
-      'Content-Type': 'application/json',
     },
   }
 
