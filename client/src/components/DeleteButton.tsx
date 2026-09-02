@@ -4,13 +4,12 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface props {
     gameId: number
+    ConfirmDeleteClick: (gameId: number) => void
 }
 
-export default function DeleteButton({gameId}: props) {
+export default function DeleteButton({gameId, ConfirmDeleteClick}: props) {
 
-    const [confirm, setConfirm] = useState<boolean>(false)
-    const { token } = useAuth()
-    const { ConfirmDeleteClick } = useProfileState(token)
+    const [confirm, setConfirm] = useState<boolean>(false);
 
     function handleDeleteClick() {
 

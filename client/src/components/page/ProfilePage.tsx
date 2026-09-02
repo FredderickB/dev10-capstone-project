@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 export default function ProfilePage() {
 
   const { token } = useAuth();
-  const { profileState } = useProfileState(token);
+  const { profileState, ConfirmDeleteClick } = useProfileState(token);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function ProfilePage() {
   return (
     <>
     <h3>Hello user</h3>
-      <GamesTable games={profileState.games}/>
+      <GamesTable games={profileState.games} ConfirmDeleteClick={ConfirmDeleteClick}/>
     </>
   )
 }

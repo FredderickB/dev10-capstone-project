@@ -6,9 +6,10 @@ import DeleteButton from './DeleteButton'
 
 interface props {
   games: GameSummaryDto[] | null
+  ConfirmDeleteClick : (gameId: number) => void
 }
 
-export default function GamesTable({ games }: props) {
+export default function GamesTable({ games, ConfirmDeleteClick }: props) {
 
   if (games === null) {
     return <p>Loading games</p>
@@ -41,7 +42,7 @@ export default function GamesTable({ games }: props) {
             <td>{game.status === 'IN_PROGRESS' ?
               <Link to={`/game/${game.gameId}`}>continue</Link>
               :
-              <DeleteButton gameId={game.gameId}/>
+              <DeleteButton gameId={game.gameId} ConfirmDeleteClick={ConfirmDeleteClick}/>
             }</td>
           </tr>
         )).toReversed()}

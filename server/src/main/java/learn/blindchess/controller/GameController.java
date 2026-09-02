@@ -62,6 +62,22 @@ public class GameController {
         return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<?> deleteGame(
+            @AuthenticationPrincipal Integer userId,
+            @PathVariable int gameId) throws DataAccessException {
+
+        // todo: authorize user
+
+        boolean result = service.delete(gameId);
+
+        if (result) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
+    }
+
     @GetMapping()
     public ResponseEntity<?> getAllGames(
             @AuthenticationPrincipal Integer userId

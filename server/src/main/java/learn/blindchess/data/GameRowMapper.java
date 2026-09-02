@@ -23,6 +23,7 @@ public class GameRowMapper implements RowMapper<Game> {
         game.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         game.setBoardPeaks(rs.getInt("board_peaks"));
         game.setUserId(rs.getInt("user_id"));
+        game.setDeleted(rs.getBoolean("is_deleted"));
 
 
         return game;

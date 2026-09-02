@@ -53,8 +53,7 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
         const initialFen = result.data.fen;
         const playerColor = result.data.playerColor;
 
-        const initialMoveNumber =
-          playerColor === 'BLACK' && getMoveNumber(initialFen) === 1 ? 2 : 1;
+        const initialMoveNumber = getMoveNumber(initialFen)
 
         setGameState((prev) => ({
           ...prev,
