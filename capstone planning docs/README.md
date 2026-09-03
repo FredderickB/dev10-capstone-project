@@ -12,7 +12,9 @@ Suggested:
 
 ## general overview
 
-- blind fold chess training app built with react type script and java spring boot security, oauth, stockfish api, chesslib
+- Blind chess
+- My project allows you to play blindfolded chess against a bot: you can play moves, peak at the board when you need help, and review past games.
+- For in-curriculum tech, my project uses java, spring boot, sql for the backend; react for the front end. My out-of-curriculum tech is typescript, spring security, oauth, a stockfish api, and a java chess library. 
 
 ## domain knowledge
 - SAN: move notation used by humans. ex: Nf3, dxe5

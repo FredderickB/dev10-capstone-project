@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import Board from '../Board';
 import MatchInfo from '../MatchInfo';
@@ -12,6 +13,7 @@ import { useGameSession } from '../../hooks/useGameSession';
 export default function GamePage() {
   const { gameId: rawGameId } = useParams<{ gameId: string }>();
   const { token } = useAuth();
+  const navigate = useNavigate()
 
   const {
     gameState,
@@ -21,6 +23,12 @@ export default function GamePage() {
     handleMoveSubmission,
     handleResign
   } = useGameSession(rawGameId, token)
+
+  useEffect(() => {
+      if (!token) {
+        navigate('/')
+      }
+    }, [token, navigate])
 
   return (
     <div>

@@ -1,41 +1,52 @@
 import { useState, useEffect, useCallback, type ChangeEvent, type FormEvent } from 'react';
-import { fetchGames, sendResignation } from '../services/GameApi';
+import { deleteGame, fetchGames, sendResignation } from '../services/GameApi';
 import type { GameSummaryDto } from '../services/utils/DTOs/GameDtos';
 
 export interface profilePageState {
  
     games: GameSummaryDto[] | null
+
 }
 
 export function useProfileState(token: string | null) {
   const [profileState, setProfileState] = useState<profilePageState>({
-  games: []
+  games: null,
   });
 
-  useEffect(() => {
-    async function loadGames() {
-      if (!token) return;
+ const loadGames = useCallback(async () => {
+    if (!token) return;
 
-      const result = await fetchGames(token);
+    const result = await fetchGames(token);
 
-      if (result.success && result.data) {
-        setProfileState((prev) => ({
-            ...prev, games: result.data
-        })
-        )
-      } else {
-        
-      }
+    if (result.success && result.data) {
+      setProfileState({ games: result.data });
+    } else {
+      setProfileState({ games: [] });
     }
-
-    loadGames();
   }, [token]);
+
+  useEffect(() => {
+    loadGames();
+  }, [loadGames]);
 
 
   
+    const ConfirmDeleteClick = useCallback(
+      async (gameId: number) => {
+
+        const result = await deleteGame(token, gameId)
+
+        if (result.success) {
+         await loadGames();
+        } else {
+          console.error("failed to handle delete", result.errors);
+        }
+      }, [token]
+    )
 
 
   return {
-    profileState
+    profileState,
+    ConfirmDeleteClick
   };
 }

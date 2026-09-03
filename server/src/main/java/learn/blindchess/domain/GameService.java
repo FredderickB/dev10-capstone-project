@@ -93,6 +93,12 @@ public class GameService {
 
     }
 
+    public boolean delete(int gameId) throws DataAccessException {
+
+        return gameRepository.delete(gameId);
+
+    }
+
     private Result<Game> validateGameRequest(GameRequestDto dto) {
 
         Result<Game> result = new Result<>();

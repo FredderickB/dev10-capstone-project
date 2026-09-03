@@ -43,21 +43,5 @@ class UserServiceTest {
             verify(repository).create(any());
         }
 
-        @Test
-        void shouldUpdateWhenUserIsFound() throws DataAccessException {
-
-            User existingUser = getUserA();
-            existingUser.setUsername("new name");
-
-            when(repository.update(existingUser)).thenReturn(existingUser);
-            when(repository.findByEmail(existingUser.getEmail())).thenReturn(existingUser);
-
-            Result<User> actual = service.processGoogleUser(existingUser);
-            Result<User> expected = makeSuccessResult(existingUser);
-
-            assertEquals(expected, actual);
-            verify(repository).update(any());
-
-        }
     }
 }

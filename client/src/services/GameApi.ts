@@ -25,6 +25,25 @@ export async function createGame(jwtToken: string | null, requestDto: GameReques
 
 }
 
+export async function deleteGame(jwtToken: string | null, gameId: number): Promise<Result<void>> {
+
+  if (!jwtToken) {
+    jwtToken = ''
+  }
+
+  const config = {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${jwtToken}`,
+      'Content-Type': 'application/json',
+    },
+  }
+
+  const response = await fetch(`${API_URL}/${gameId}`, config)
+  return await makeResult<void>(response);
+
+}
+
 export async function fetchGame(jwtToken: string | null, gameId: number): Promise<Result<GameResponseDto>> {
 
   if (!jwtToken) {
