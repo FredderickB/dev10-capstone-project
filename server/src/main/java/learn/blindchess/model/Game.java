@@ -13,6 +13,7 @@ public class Game {
     private LocalDateTime createdAt;
     private int boardPeaks;
     private Integer userId;
+    private boolean isDeleted;
 
     public Game(Game game) {
         this.gameId = game.getGameId();
@@ -23,6 +24,7 @@ public class Game {
         this.playerColor = game.getPlayerColor();
         this.userId = game.getUserId();
         this.fen = game.getFen();
+        this.isDeleted = game.isDeleted();
     }
 
     public Game() {
@@ -108,18 +110,6 @@ public class Game {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && Objects.equals(gameId, game.gameId) && Objects.equals(fen, game.fen) && status == game.status && playerColor == game.playerColor && Objects.equals(createdAt, game.createdAt) && Objects.equals(userId, game.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(gameId, engineLevel, fen, status, playerColor, createdAt, boardPeaks, userId);
-    }
-
-    @Override
     public String toString() {
         return "Game{" +
                 "gameId=" + gameId +
@@ -130,6 +120,27 @@ public class Game {
                 ", createdAt=" + createdAt +
                 ", boardPeaks=" + boardPeaks +
                 ", userId=" + userId +
+                ", isDeleted=" + isDeleted +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && isDeleted == game.isDeleted && Objects.equals(gameId, game.gameId) && Objects.equals(fen, game.fen) && status == game.status && playerColor == game.playerColor && Objects.equals(createdAt, game.createdAt) && Objects.equals(userId, game.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameId, engineLevel, fen, status, playerColor, createdAt, boardPeaks, userId, isDeleted);
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

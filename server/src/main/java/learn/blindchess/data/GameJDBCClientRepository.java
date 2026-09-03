@@ -26,6 +26,7 @@ public class GameJDBCClientRepository implements GameRepository{
                     g.player_color_id,
                     g.board_peaks,
                     g.created_at,
+                    g.is_deleted,
                     u.username,
                     u.email
                 from game g
@@ -51,13 +52,14 @@ public class GameJDBCClientRepository implements GameRepository{
                     g.status_id,
                     g.player_color_id,
                     g.board_peaks,
+                    g.is_deleted,
                     g.created_at,
                     u.username,
                     u.email
                 from game g
                 left join user u on u.user_id = g.user_id
                 join player_color p on p.player_color_id = g.player_color_id
-                where g.user_id = ?;
+                where g.user_id = ? and g.is_deleted = 0;
                 """;
 
         return client.sql(sql)
@@ -112,6 +114,21 @@ public class GameJDBCClientRepository implements GameRepository{
                 .param("gameId", game.getGameId())
                 .param("statusId", game.getStatus().getStatusId())
                 .param("boardPeaks", game.getBoardPeaks())
+                .update();
+
+        return rowsAffected > 0;
+    }
+
+    @Override
+    public boolean delete(int gameId) throws DataAccessException {
+        String sql = """
+            UPDATE game SET
+                is_deleted = 1
+            WHERE game_id = :gameId;
+            """;
+
+        int rowsAffected = client.sql(sql)
+                .param("gameId", gameId)
                 .update();
 
         return rowsAffected > 0;

@@ -1,9 +1,9 @@
 package learn.blindchess.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import learn.blindchess.data.DataAccessException;
 import learn.blindchess.domain.GameService;
 import learn.blindchess.domain.Result;
+import learn.blindchess.dto.GameResponseDto;
 import learn.blindchess.model.Game;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,28 +26,31 @@ import static learn.blindchess.TestHelper.*;
 @AutoConfigureMockMvc
 class GameControllerTest {
 
+
     @MockitoBean
     GameService service;
 
     @Autowired
     MockMvc mvc;
 
-    private final ObjectMapper jsonMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper jsonMapper;
 
     @Test
     void shouldCreateValidGame() throws Exception {
 
         String requestJson = """
                 {
-                    "PlayerColor": "White",
+                    "playerColor": "White",
                     "engineLevel": 1000
                 }
                 """;
 
         Game validGame = getGameA();
         Result<Game> expectedResult = makeSuccessResult(validGame);
-
         when(service.create(null, getNewGameRequestDto())).thenReturn(expectedResult);
+
+        GameResponseDto expectedDto = new GameResponseDto(validGame);
 
         MockHttpServletRequestBuilder request = post("/api/games")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +58,7 @@ class GameControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isCreated())
-                .andExpect(content().json(jsonMapper.writeValueAsString(validGame)));
+                .andExpect(content().json(jsonMapper.writeValueAsString(expectedDto)));
 
     }
 }

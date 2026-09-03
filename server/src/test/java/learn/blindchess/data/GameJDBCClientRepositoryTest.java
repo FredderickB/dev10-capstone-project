@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static learn.blindchess.TestHelper.*;
@@ -102,6 +103,20 @@ class GameJDBCClientRepositoryTest {
         boolean actual = repository.update(updatedGame);
 
         assertFalse(actual);
+    }
+
+    @Test
+    void shouldSoftDelete() throws DataAccessException {
+
+        boolean actual = repository.delete(1);
+
+        assertTrue(actual);
+
+        Game gameFound = repository.findById(1);
+        Game expected = getGameA();
+        expected.setDeleted(true);
+
+        assertEquals(expected, gameFound);
     }
 
 

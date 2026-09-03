@@ -40,6 +40,7 @@ create table game (
 	player_color_id int,
 	created_at timestamp default CURRENT_TIMESTAMP,
 	board_peaks int not null default 0,
+	is_deleted tinyint(1) not null default 0,
 	constraint fk_user_id_game
 		foreign key (user_id)
 		references user(user_id)
