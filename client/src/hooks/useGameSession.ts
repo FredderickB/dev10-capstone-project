@@ -37,24 +37,25 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
     colorToMove: 'white',
   });
 
-  useEffect(() => {
-    async function loadGame() {
-      if (!rawGameId) return;
+  const loadGame = useCallback(
 
+    async () => {
+      if (!rawGameId) return;
+  
       const parsedGameId = parseInt(rawGameId, 10);
       if (isNaN(parsedGameId)) {
         setGameState((prev) => ({ ...prev, errors: ['Invalid Game ID'] }));
         return;
       }
-
+  
       const result = await fetchGame(token, parsedGameId);
-
+  
       if (result.success && result.data) {
         const initialFen = result.data.fen;
         const playerColor = result.data.playerColor;
-
+  
         const initialMoveNumber = getMoveNumber(initialFen)
-
+  
         setGameState((prev) => ({
           ...prev,
           moveNumber: initialMoveNumber,
@@ -71,7 +72,12 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
           errors: result.errors ?? ['Failed to load game'],
         }));
       }
-    }
+    }, [token]
+  )
+ 
+  
+  
+  useEffect(() => {
 
     loadGame();
   }, [rawGameId, token]);
@@ -123,19 +129,18 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
       } else if (result.data) {
         const updatedFen = result.data.updatedFen;
         const nextColor = getColorToMove(updatedFen) ?? 'white';
-        const nextMoveNum = result.data.moveNumber ?? moveNumber + 2;
+        const nextMoveNum = result.data.moveNumber + 1;
 
         setGameState((prev) => ({
           ...prev,
           errors: [],
-          moveNumber: nextMoveNum,
           engineSan: result.data?.engineSan,
-          fen: updatedFen,
-          colorToMove: nextColor,
           playSan: '',
           peakedAtBoard: false,
           viewBoard: false
         }));
+
+        loadGame();
       }
     },
     [gameState, token]
