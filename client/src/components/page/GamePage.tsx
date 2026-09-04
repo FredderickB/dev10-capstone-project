@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import Board from '../Board';
-import MatchInfo from '../MatchInfo';
-import BoardActions from '../BoardActions';
-import PlayerActions from '../PlayerActions';
+import Board from '../midsize/Board';
+import MatchInfo from '../midsize/MatchInfo';
+import BoardActions from '../smallsize/BoardActions';
+import PlayerActions from '../smallsize/PlayerActions';
 
 import { useAuth } from '../../contexts/AuthContext';
-import MoveResponseContainer from '../MoveResponseContainer';
+import MoveResponseContainer from '../midsize/MoveResponseContainer';
 import { useGameSession } from '../../hooks/useGameSession';
 
 export default function GamePage() {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useProfileState } from '../hooks/useProfileState';
-import { useAuth } from '../contexts/AuthContext';
+import { useProfileState } from '../../hooks/useProfileState';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface props {
     gameId: number

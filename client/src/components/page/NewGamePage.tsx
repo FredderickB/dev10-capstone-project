@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import EngineSelector from '../EngineSelector'
+import EngineSelector from '../smallsize/EngineSelector'
 import { useNavigate } from 'react-router-dom'
 import { createGame } from '../../services/GameApi'
-import ColorSelector from '../ColorSelector'
+import ColorSelector from '../smallsize/ColorSelector'
 import type { GameRequestDto } from '../../services/utils/DTOs/GameDtos'
 import { useAuth } from '../../contexts/AuthContext'
 

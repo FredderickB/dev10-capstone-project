@@ -1,8 +1,8 @@
 import { GoogleLogin } from '@react-oauth/google';
 import type { CredentialResponse } from '@react-oauth/google';
 import { useState } from 'react';
-import { fetchJwt } from '../services/AuthApi';
-import { useAuth } from '../contexts/AuthContext';
+import { fetchJwt } from '../../services/AuthApi';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false);

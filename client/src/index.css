@@ -1,0 +1,64 @@
+:root {
+  --dojo-dark: #121212;      
+  --dojo-parchment: #f0e9d2; 
+  --dojo-gold: #c5a059;      
+  --dojo-hover: #222222;
+  --dojo-bg: #121212;
+}
+
+body {
+  background-color: var(--dojo-bg);
+  color: var(--dojo-parchment);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.text-parchment {
+  color: var(--dojo-parchment) !important;
+}
+
+.text-gold {
+  color: var(--dojo-gold) !important;
+}
+
+.tracking-wider {
+  letter-spacing: 0.15em;
+  font-family: 'Cinzel', 'Georgia', serif;
+}
+
+.btn-dojo-gold {
+  background-color: var(--dojo-gold);
+  color: #121212;
+  border: 1px solid var(--dojo-gold);
+  padding: 0.8rem 1.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-dojo-gold:hover,
+.btn-dojo-gold:focus {
+  background-color: #d8b268;
+  border-color: #d8b268;
+  color: #000000;
+  transform: translateY(-1px);
+}
+
+.min-vh-80 {
+  min-height: 80vh;
+}
+
+.max-w-xs {
+  max-width: 320px;
+}
+
+.max-w-md {
+  max-width: 540px;
+}
+
+.font-serif {
+  font-family: 'Georgia', serif;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+

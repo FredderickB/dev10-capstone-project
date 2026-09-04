@@ -1,6 +1,5 @@
 import React from 'react'
-import UserStats from '../UserStats'
-import GamesTable from '../GamesTable'
+import GamesTable from '../midsize/GamesTable'
 import { useAuth } from '../../contexts/AuthContext'
 import { useProfileState } from '../../hooks/useProfileState'
 import { useNavigate } from 'react-router-dom'

@@ -1,8 +1,8 @@
 import React from 'react'
-import type { GameSummaryDto } from '../services/utils/DTOs/GameDtos'
-import { formatDate } from '../utils/DateUtils'
+import type { GameSummaryDto } from '../../services/utils/DTOs/GameDtos'
+import { formatDate } from '../../utils/DateUtils'
 import { Link } from 'react-router-dom'
-import DeleteButton from './DeleteButton'
+import DeleteButton from '../smallsize/DeleteButton'
 
 interface props {
   games: GameSummaryDto[] | null

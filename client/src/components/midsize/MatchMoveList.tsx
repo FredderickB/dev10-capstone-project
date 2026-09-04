@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import type { Move, PgnTurn } from '../services/utils/DTOs/MoveDtos'
-import { fetchGameMoves } from '../services/MoveApi';
-import { useAuth } from '../contexts/AuthContext';
+import type { Move, PgnTurn } from '../../services/utils/DTOs/MoveDtos'
+import { fetchGameMoves } from '../../services/MoveApi';
+import { useAuth } from '../../contexts/AuthContext';
 import { useParams } from 'react-router-dom';
-import { formatMovesToPgn } from '../utils/MoveUtils';
+import { formatMovesToPgn } from '../../utils/MoveUtils';
 
 interface props {
   moveNumber: number | undefined
