@@ -1,0 +1,24 @@
+.dojo-toggle-group {
+  background-color: rgba(18, 18, 18, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.dojo-toggle-btn {
+  color: var(--dojo-parchment);
+  background: transparent;
+  border: none;
+  font-family: 'Georgia', serif;
+  font-size: 0.85rem;
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px !important;
+}
+
+.dojo-toggle-btn:hover {
+  color: var(--dojo-gold);
+}
+
+.dojo-toggle-btn.active {
+  background-color: var(--dojo-gold) !important;
+  color: #121212 !important;
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+}

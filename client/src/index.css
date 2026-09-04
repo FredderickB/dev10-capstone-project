@@ -3,7 +3,7 @@
   --dojo-parchment: #f0e9d2; 
   --dojo-gold: #c5a059;      
   --dojo-hover: #222222;
-  --dojo-bg: #121212;
+  --dojo-bg: #121212d8;
 }
 
 body {
@@ -22,7 +22,7 @@ body {
 }
 
 .tracking-wider {
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   font-family: 'Cinzel', 'Georgia', serif;
 }
 

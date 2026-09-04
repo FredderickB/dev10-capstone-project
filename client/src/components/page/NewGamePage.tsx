@@ -41,11 +41,11 @@ export default function NewGamePage() {
   }
 
   return (
-    <div>
+    <div className="container d-flex flex-column align-items-center justify-content-center text-center py-5 min-vh-80">
       <EngineSelector value={request.engineLevel} onChange={handleEngineChange}/>
       <ColorSelector value={request.playerColor} onChange={handleColorChange}/>
       <div>
-        <button onClick={handleClick}> start match </button>
+        <button onClick={handleClick} className='btn btn-dojo-gold tracking-wider text-uppercase'> start match </button>
       </div>
     </div>
   )
