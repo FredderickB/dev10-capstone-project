@@ -7,18 +7,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserServiceImplementor implements UserService {
+public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImplementor(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public Result<User> findByEmail(String email) throws DataAccessException {
+    public Result<User> findById(int userId) throws DataAccessException {
 
         Result<User> result = new Result<>();
-        result.setPayload(userRepository.findByEmail(email));
+        result.setPayload(userRepository.findById(userId));
+
+        if (result.getPayload() == null) {
+            result.addErrorMessage("User not found", ResultType.NOT_FOUND);
+        }
+
         return result;
 
     }

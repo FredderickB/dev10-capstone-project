@@ -19,7 +19,7 @@ export default function ProfilePage() {
 
   return (
     <>
-    <h3>Hello user</h3>
+    <h3>Hello {profileState.userName?.username}</h3>
       <GamesTable games={profileState.games} ConfirmDeleteClick={ConfirmDeleteClick}/>
     </>
   )
