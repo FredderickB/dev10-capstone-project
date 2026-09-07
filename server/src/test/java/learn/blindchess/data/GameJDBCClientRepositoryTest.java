@@ -82,6 +82,20 @@ class GameJDBCClientRepositoryTest {
     }
 
     @Test
+    void shouldCreateWithNullGuest() throws DataAccessException {
+
+        Game newGame = getNewGame();
+        newGame.setGuestId(null);
+
+        Game expected = newGame;
+        expected.setGameId(2);
+        Game actual = repository.create(newGame);
+
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
     void shouldUpdate() throws DataAccessException {
 
         Game updatedGame = getGameA();

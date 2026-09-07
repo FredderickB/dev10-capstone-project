@@ -14,6 +14,7 @@ public class Game {
     private int boardPeaks;
     private Integer userId;
     private boolean isDeleted;
+    private String guestId;
 
     public Game(Game game) {
         this.gameId = game.getGameId();
@@ -25,12 +26,13 @@ public class Game {
         this.userId = game.getUserId();
         this.fen = game.getFen();
         this.isDeleted = game.isDeleted();
+        this.guestId = game.getGuestId();
     }
 
     public Game() {
     }
 
-    public Game(Integer gameId, int engineLevel, String fen, LocalDateTime createdAt, GameStatus status,PlayerColor playerColor, int boardPeaks, Integer userId) {
+    public Game(Integer gameId, int engineLevel, String fen, LocalDateTime createdAt, GameStatus status,PlayerColor playerColor, int boardPeaks, Integer userId, String guestId) {
         this.gameId = gameId;
         this.engineLevel = engineLevel;
         this.fen = fen;
@@ -39,6 +41,7 @@ public class Game {
         this.playerColor = playerColor;
         this.boardPeaks = boardPeaks;
         this.userId = userId;
+        this.guestId = guestId;
     }
 
     public Integer getGameId() {
@@ -109,6 +112,26 @@ public class Game {
         this.playerColor = playerColor;
     }
 
+    public String getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(String guestId) {
+        this.guestId = guestId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && isDeleted == game.isDeleted && Objects.equals(gameId, game.gameId) && Objects.equals(fen, game.fen) && status == game.status && playerColor == game.playerColor && Objects.equals(createdAt, game.createdAt) && Objects.equals(userId, game.userId) && Objects.equals(guestId, game.guestId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameId, engineLevel, fen, status, playerColor, createdAt, boardPeaks, userId, isDeleted, guestId);
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -121,19 +144,8 @@ public class Game {
                 ", boardPeaks=" + boardPeaks +
                 ", userId=" + userId +
                 ", isDeleted=" + isDeleted +
+                ", guestId='" + guestId + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return engineLevel == game.engineLevel && boardPeaks == game.boardPeaks && isDeleted == game.isDeleted && Objects.equals(gameId, game.gameId) && Objects.equals(fen, game.fen) && status == game.status && playerColor == game.playerColor && Objects.equals(createdAt, game.createdAt) && Objects.equals(userId, game.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(gameId, engineLevel, fen, status, playerColor, createdAt, boardPeaks, userId, isDeleted);
     }
 
     public boolean isDeleted() {

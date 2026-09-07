@@ -23,7 +23,7 @@ public class TestHelper {
             GameStatus.IN_PROGRESS,
             PlayerColor.WHITE,
             0,
-            1);
+            1, null);
     private static final Game NEW_GAME = new Game(
             null,
             500,
@@ -32,7 +32,7 @@ public class TestHelper {
             GameStatus.IN_PROGRESS,
             PlayerColor.WHITE,
             0,
-            1);
+            1, null);
 
     private static final GameRequestDto GAME_REQUEST_DTO_A = new GameRequestDto("WHITE", 1000);
 

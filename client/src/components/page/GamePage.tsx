@@ -84,11 +84,11 @@ export default function GamePage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Unified Sidebar (Match Status, 40% Move History, Engine Response) */}
+        {/* RIGHT COLUMN: Unified Sidebar */}
         <div className="col-12 col-md-5 col-lg-5 col-xl-4 h-100 overflow-hidden">
           <div className="p-3 border border-secondary border-opacity-25 rounded-3 bg-dark bg-opacity-50 shadow-sm h-100 d-flex flex-column gap-2 overflow-hidden">
 
-            {/* 1. Match Info Header (Top ~20%) */}
+            {/*  Match Info Header */}
             <div className="p-2 border border-secondary border-opacity-25 rounded-3 bg-dark bg-opacity-75 flex-shrink-0">
               <h2 className="fs-6 text-uppercase text-gold tracking-wider mb-2 font-serif border-bottom border-secondary border-opacity-25 pb-1">
                 Match Status
@@ -104,7 +104,7 @@ export default function GamePage() {
               )}
             </div>
 
-            {/* 2. Move History List (Locked to exactly 40% vertical height) */}
+            {/*  Move History List  */}
             <div 
               className="p-2 border border-secondary border-opacity-25 rounded-3 bg-dark bg-opacity-75 d-flex flex-column overflow-hidden min-h-0 flex-shrink-0"
               style={{ height: '60%' }}
@@ -121,7 +121,7 @@ export default function GamePage() {
               </div>
             </div>
 
-            {/* 3. Engine Response & Error Container (Remaining Space) */}
+            {/*  Engine Response & Error Container  */}
             <div className="p-2 border border-secondary border-opacity-25 rounded-3 bg-dark bg-opacity-75 flex-grow-1 d-flex flex-column overflow-hidden min-h-0">
               <h2 className="fs-6 text-uppercase text-gold tracking-wider mb-2 font-serif border-bottom border-secondary border-opacity-25 pb-1 flex-shrink-0">
                 Engine Response [{gameState.gameDto?.engineLevel}] ELO

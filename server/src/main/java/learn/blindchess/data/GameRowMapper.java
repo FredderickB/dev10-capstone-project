@@ -24,6 +24,7 @@ public class GameRowMapper implements RowMapper<Game> {
         game.setBoardPeaks(rs.getInt("board_peaks"));
         game.setUserId(rs.getInt("user_id"));
         game.setDeleted(rs.getBoolean("is_deleted"));
+        game.setGuestId(rs.getString("guest_id"));
 
 
         return game;

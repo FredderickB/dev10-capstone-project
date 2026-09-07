@@ -18,9 +18,23 @@ export default function ProfilePage() {
   }, [token, navigate])
 
   return (
-    <>
-    <h3>Hello {profileState.userName?.username}</h3>
-      <GamesTable games={profileState.games} ConfirmDeleteClick={ConfirmDeleteClick}/>
-    </>
+    <div className="container py-5 font-serif min-vh-100">
+      <div className="d-flex align-items-center justify-content-between mb-4 border-bottom border-gold pb-3">
+        <div>
+          <h2 className="text-gold text-uppercase fw-bold tracking-wider fs-3 mb-1">
+            {profileState.userName?.username ? `${profileState.userName.username}'s Profile` : 'Player Profile'}
+          </h2>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-12">
+          <GamesTable 
+            games={profileState.games} 
+            ConfirmDeleteClick={ConfirmDeleteClick} 
+          />
+        </div>
+      </div>
+    </div>
   )
 }

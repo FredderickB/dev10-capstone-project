@@ -20,6 +20,7 @@ public class GameJDBCClientRepository implements GameRepository{
                 select
                     g.game_id,
                     g.user_id,
+                    g.guest_id,
                     g.engine_level,
                     g.fen,
                     g.status_id,
@@ -47,6 +48,7 @@ public class GameJDBCClientRepository implements GameRepository{
                 select
                     g.game_id,
                     g.user_id,
+                    g.guest_id,
                     g.engine_level,
                     g.fen,
                     g.status_id,
@@ -75,14 +77,15 @@ public class GameJDBCClientRepository implements GameRepository{
     @Override
     public Game create(Game game) throws DataAccessException {
         String sql = """
-                 insert into game (user_id, engine_level, fen, status_id, created_at, board_peaks, player_color_id) values
-                    	(:userId, :engineLevel, :fen, :statusId, :createdAt, :boardPeaks, :playerColorId);
+                 insert into game (user_id, guest_id, engine_level, fen, status_id, created_at, board_peaks, player_color_id) values
+                    	(:userId, :guestId, :engineLevel, :fen, :statusId, :createdAt, :boardPeaks, :playerColorId);
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rowsAffected = client.sql(sql)
                 .param("userId", game.getUserId(), Types.INTEGER)
+                .param("guestId", game.getGuestId())
                 .param("engineLevel", game.getEngineLevel())
                 .param("fen", game.getFen())
                 .param("statusId", game.getStatus().getStatusId())
