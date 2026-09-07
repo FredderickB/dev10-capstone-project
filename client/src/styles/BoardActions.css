@@ -1,0 +1,31 @@
+.dojo-peek-btn {
+  background-color: #106615;
+  color: #ffffff;
+  border: 1px solid #388e3c;
+  font-family: 'Georgia', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease-in-out;
+}
+
+.dojo-peek-btn:hover {
+  background-color: #388e3c;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+}
+
+.dojo-move-input {
+  background-color: var(--dojo-dark) !important;
+  border: 1px solid var(--dojo-gold) !important;
+  color: var(--dojo-parchment) !important;
+  font-family: 'Georgia', serif;
+}
+
+.dojo-move-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 8px rgba(197, 160, 89, 0.4) !important;
+}
+
+.max-w-sm {
+  max-width: 280px;
+}

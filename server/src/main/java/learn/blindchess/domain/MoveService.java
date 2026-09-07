@@ -9,7 +9,6 @@ import learn.blindchess.dto.MoveRequestDto;
 import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
 import learn.blindchess.model.Move;
-import learn.blindchess.model.PlayerColor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -174,9 +173,9 @@ public class MoveService {
         return switch (status) {
             case WHITE_WIN -> "Game Over: White wins by checkmate!";
             case BLACK_WIN -> "Game Over: Black wins by checkmate!";
-            case DRAW_STALEMATE -> "Game Over: Draw by stalemate.";
-            case DRAW_50_MOVE_REPETITION -> "Game Over: Draw by 50-move rule.";
-            case DRAW_INSUFFICIENT_MATERIAL -> "Game Over: Draw due to insufficient material.";
+            case STALEMATE -> "Game Over: Draw by stalemate.";
+            case FIFTY_MOVE_REPETITION -> "Game Over: Draw by 50-move rule.";
+            case INSUFFICIENT_MATERIAL -> "Game Over: Draw due to insufficient material.";
             case IN_PROGRESS -> null;
         };
     }

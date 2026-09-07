@@ -1,5 +1,5 @@
 import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './Layout'
+import Layout from './midsize/Layout'
 import Landing from './page/Landing';
 import GamePage from './page/GamePage';
 import ProfilePage from './page/ProfilePage';

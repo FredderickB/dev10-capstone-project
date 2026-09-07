@@ -1,0 +1,18 @@
+
+.dojo-action-btn {
+  background-color: transparent;
+  color: var(--dojo-parchment, #f4ecd8);
+  border: 1px solid var(--dojo-gold, #c5a059);
+  font-family: 'Georgia', serif;
+  transition: all 0.2s ease-in-out;
+}
+
+.dojo-action-btn:hover {
+  background-color: var(--dojo-gold, #c5a059);
+  color: #121212;
+  box-shadow: 0 0 8px rgba(197, 160, 89, 0.4);
+}
+
+.fs-7 {
+  font-size: 0.825rem;
+}

@@ -1,0 +1,35 @@
+/* Maintain strict aspect ratio to prevent board layout shifts */
+.dojo-board-frame {
+ width: 100%;
+ max-width: min(100%, 65vh);
+  max-height: min(100%, 65vh);
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.min-h-0 {
+  min-height: 0 !important;
+}
+
+/* Scrollbar styling for the move history box */
+.dojo-history-scroll {
+  max-height: 100%;
+}
+
+.dojo-history-container {
+  max-height: 130px; /* Adjust this value (e.g., 120px–150px) to make it as compact as you'd like */
+}
+
+.dojo-history-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dojo-history-scroll::-webkit-scrollbar-thumb {
+  background: var(--dojo-gold);
+  border-radius: 3px;
+}
+
+.dojo-history-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}

@@ -100,15 +100,15 @@ public class ChessLibService {
         }
 
         if (board.isStaleMate()) {
-            return GameStatus.DRAW_STALEMATE;
+            return GameStatus.STALEMATE;
         }
 
         if (board.getHalfMoveCounter() >= 100) {
-            return GameStatus.DRAW_50_MOVE_REPETITION;
+            return GameStatus.FIFTY_MOVE_REPETITION;
         }
 
         if (board.isInsufficientMaterial()) {
-            return GameStatus.DRAW_INSUFFICIENT_MATERIAL;
+            return GameStatus.INSUFFICIENT_MATERIAL;
         }
 
         return GameStatus.IN_PROGRESS;

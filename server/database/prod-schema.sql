@@ -17,9 +17,9 @@ insert into game_status (status_text) values
 	("IN_PROGRESS"),
 	("WHITE_WIN"),
 	("BLACK_WIN"),
-	("DRAW_INSUFFICIENT_MATERIAL"),
-	("DRAW_STALEMATE"),
-	("DRAW_50_MOVE_REPETITION");
+	("INSUFFICIENT_MATERIAL"),
+	("STALEMATE"),
+	("50_MOVE_REPETITION");
 	
 
 create table player_color (
@@ -34,6 +34,7 @@ insert into player_color (color_text) values
 create table game (
 	game_id int primary key auto_increment,
 	user_id int null,
+	guest_id varchar(100) null,
 	engine_level int not null,
 	fen varchar(100) not null,
 	status_id int not null,

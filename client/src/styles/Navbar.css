@@ -1,0 +1,22 @@
+
+.dojo-navbar {
+  background-color: var(--dojo-dark);
+}
+
+.dojo-link {
+  color: var(--dojo-parchment) !important;
+  font-family: 'Georgia', serif;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid transparent;
+}
+
+.dojo-link:hover,
+.dojo-link.active {
+  opacity: 1;
+  color: var(--dojo-gold) !important;
+  border-bottom: 2px solid var(--dojo-gold);
+}

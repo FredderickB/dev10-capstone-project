@@ -6,9 +6,9 @@ public enum GameStatus {
     IN_PROGRESS(1),
     WHITE_WIN(2),
     BLACK_WIN(3),
-    DRAW_INSUFFICIENT_MATERIAL(4),
-    DRAW_STALEMATE(5),
-    DRAW_50_MOVE_REPETITION(6);
+    INSUFFICIENT_MATERIAL(4),
+    STALEMATE(5),
+    FIFTY_MOVE_REPETITION(6);
 
     private final int statusId;
 

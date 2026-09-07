@@ -1,0 +1,28 @@
+.dojo-stepper-bg {
+  background-color: rgba(18, 18, 18, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.dojo-stepper-btn {
+  background: transparent;
+  border: none;
+  line-height: 1;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.dojo-stepper-btn:hover:not(:disabled) {
+  color: #ffffff !important;
+  background-color: var(--dojo-gold);
+  border-radius: 4px;
+}
+
+.dojo-stepper-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.min-w-120 {
+  min-width: 150px;
+  text-align: center;
+}

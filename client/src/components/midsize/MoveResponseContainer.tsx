@@ -21,12 +21,12 @@ export default function MoveResponseContainer({ errors, engineResponse, gameStat
   const isGameOver = gameStatus && gameStatus !== 'IN_PROGRESS';
 
   if (!engineResponse && !isGameOver) {
-    return null; 
+    return <p className="text-parchment opacity-50 fst-italic text-center my-1 fs-7">[ check move history ]</p> 
   }
 
   return (
     <div>
-      {engineResponse && <p>Engine responds with: {engineResponse}</p>}
+      {engineResponse && <p className='text-danger'>Engine responds with: {engineResponse}</p>}
       {isGameOver && <p>Game over: {gameStatus}</p>}
     </div>
   );
