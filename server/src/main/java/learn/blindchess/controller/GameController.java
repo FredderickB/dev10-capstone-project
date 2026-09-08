@@ -8,6 +8,7 @@ import learn.blindchess.dto.GameRequestDto;
 import learn.blindchess.dto.GameResponseDto;
 import learn.blindchess.dto.GameSummaryDto;
 import learn.blindchess.model.Game;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,7 @@ import static learn.blindchess.controller.ErrorResponse.build;
 @RestController
 public class GameController {
 
-    private GameService service;
+    private final GameService service;
 
     public GameController(GameService service) {
         this.service = service;
@@ -30,11 +31,11 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<?> createGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal user,
             @Valid @RequestBody GameRequestDto requestDto
     ) throws DataAccessException {
 
-        Result<Game> result = service.create(userId, requestDto);
+        Result<Game> result = service.create(user, requestDto);
 
         if (!result.isSuccess()) {
             return build(result);
@@ -47,10 +48,8 @@ public class GameController {
 
     @GetMapping("/{gameId}")
     public ResponseEntity<?> getGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal user,
             @PathVariable int gameId) throws DataAccessException {
-
-        // todo: authorize user
 
         Game gameFound = service.findById(gameId);
 
@@ -64,7 +63,7 @@ public class GameController {
 
     @DeleteMapping("/{gameId}")
     public ResponseEntity<?> deleteGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal user,
             @PathVariable int gameId) throws DataAccessException {
 
         // todo: authorize user
@@ -80,16 +79,16 @@ public class GameController {
 
     @GetMapping()
     public ResponseEntity<?> getAllGames(
-            @AuthenticationPrincipal Integer userId
+            @AuthenticationPrincipal UserPrincipal user
             ) throws DataAccessException {
 
         // todo: authorize user
 
-        if (userId == null) {
+        if (user.getUserId() == null) {
             return new ResponseEntity<>("User Id null", HttpStatus.BAD_REQUEST);
         }
 
-        List<GameSummaryDto> gamesFound = service.findAllByUserId(userId);
+        List<GameSummaryDto> gamesFound = service.findAllByUserId(user.getUserId());
 
         if (gamesFound != null) {
             return new ResponseEntity<>(gamesFound, HttpStatus.OK);
@@ -100,17 +99,9 @@ public class GameController {
 
     @PostMapping("/{gameId}/resign")
     public ResponseEntity<?> resignGame(
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal UserPrincipal user,
             @PathVariable int gameId
     ) throws DataAccessException {
-
-        Integer userId = null;
-
-        // todo: authorize user
-
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
 
         Game gameFound = service.findById(gameId);
 

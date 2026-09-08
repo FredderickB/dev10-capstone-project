@@ -34,14 +34,14 @@ export default function GamesTable({ games, ConfirmDeleteClick }: props) {
       </caption>
       <table 
         className="table table-dark table-hover align-middle mb-0 font-serif"
-        style={{ tableLayout: 'fixed' }} // Prevents column resizing when content expands
+        style={{ tableLayout: 'fixed' }}
       >
         <thead>
           <tr className="border-bottom border-gold text-gold text-uppercase fs-7 tracking-wider">
             <th scope="col" className="bg-transparent">Date</th>
-            <th scope="col" className="bg-transparent">Engine ELO</th>
-            <th scope="col" className="bg-transparent">Color</th>
-            <th scope="col" className="bg-transparent">Board Peeks</th>
+            <th scope="col" className="bg-transparent" style={{ width: '120px' }}>Engine ELO</th>
+            <th scope="col" className="bg-transparent" style={{ width: '85px' }}>Color</th>
+            <th scope="col" className="bg-transparent" style={{ width: '85px' }}>Peeks</th>
             <th scope="col" className="bg-transparent">Status</th>
             <th scope="col" className="bg-transparent">Moves</th>
             <th scope="col" className="bg-transparent text-end" style={{ width: '150px' }}>Action</th>
@@ -73,7 +73,7 @@ export default function GamesTable({ games, ConfirmDeleteClick }: props) {
                 )}
               </td>
             </tr>
-          )).toReversed()}
+          ))}
         </tbody>
       </table>
     </div>

@@ -7,12 +7,12 @@ import { useEffect } from 'react'
 
 export default function ProfilePage() {
 
-  const { token } = useAuth();
+  const { token, isRegisteredUser } = useAuth();
   const { profileState, ConfirmDeleteClick } = useProfileState(token);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
+    if (!isRegisteredUser) {
       navigate('/')
     }
   }, [token, navigate])

@@ -20,3 +20,17 @@ export async function fetchJwt(idToken: string): Promise<Result<AuthResponse>> {
     return await makeResult<AuthResponse>(response)
     
 }
+
+export async function fetchGuestToken(): Promise<Result<AuthResponse>>{
+ 
+   const config ={
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      };
+
+    const response = await fetch(`${API_URL}/guest`, config);
+    return await makeResult<AuthResponse>(response)
+
+}

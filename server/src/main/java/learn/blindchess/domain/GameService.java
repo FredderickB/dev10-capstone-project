@@ -10,6 +10,7 @@ import learn.blindchess.model.Game;
 import learn.blindchess.model.GameStatus;
 import learn.blindchess.model.PlayerColor;
 import learn.blindchess.model.User;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,15 +44,15 @@ public class GameService {
         List<Game> gameList = gameRepository.findAllByUserId(userId);
         List<GameSummaryDto> gameSummaryDtoList = new ArrayList<>();
 
-        for (Game game: gameList) {
-        int moveCount = chessLibService.getMoveNumber(game.getFen());
+        for (Game game : gameList) {
+            int moveCount = chessLibService.getMoveNumber(game.getFen());
             gameSummaryDtoList.add(new GameSummaryDto(game, moveCount));
         }
 
         return gameSummaryDtoList;
     }
 
-    public Result<Game> create(Integer userId, GameRequestDto gameRequestDto) throws DataAccessException {
+    public Result<Game> create(UserPrincipal user, GameRequestDto gameRequestDto) throws DataAccessException {
 
         Result<Game> result = validateGameRequest(gameRequestDto);
 
@@ -59,7 +60,7 @@ public class GameService {
             return result;
         }
 
-        Game game = makeNewGame(userId, gameRequestDto);
+        Game game = makeNewGame(user, gameRequestDto);
         game = gameRepository.create(game);
 
         if (game.getPlayerColor() == BLACK) {
@@ -111,17 +112,23 @@ public class GameService {
         return result;
     }
 
-    private Game makeNewGame(Integer userId, GameRequestDto dto) throws DataAccessException {
+    private Game makeNewGame(UserPrincipal user, GameRequestDto dto) throws DataAccessException {
 
-        User user = userRepository.findById(userId);
         if (user == null) {
-            userId = null;
+            return null;
         }
-        Board board = new Board();
+
         Game game = new Game();
+        Board board = new Board();
 
+        if (user.isGuest()) {
+            game.setUserId(null);
+            game.setGuestId(user.getGuestIdentifier());
+        } else {
+            game.setUserId(user.getUserId());
+            game.setGuestId(null);
+        }
 
-        game.setUserId(userId);
         game.setPlayerColor(PlayerColor.valueOf(dto.playerColor()));
         game.setBoardPeaks(0);
         game.setCreatedAt(LocalDateTime.now());

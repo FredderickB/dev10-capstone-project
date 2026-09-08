@@ -7,7 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 export const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string[] | null>(null);
-  const { token, setToken } = useAuth();
+  const { loginWithGoogle } = useAuth();
 
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     const idToken = credentialResponse.credential;
@@ -20,26 +20,8 @@ export const GoogleLoginButton = () => {
     setLoading(true);
     setError(null);
 
-    try {
-      const result = await fetchJwt(idToken);
+    loginWithGoogle(idToken);
 
-      if (!result.success) {
-        setError(result.errors)
-      } else {
-        
-        const appJwt = result.data?.token;
-        if (appJwt) {
-          setToken(appJwt);
-        }
-
-      }
-
-    } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Failed to authenticate');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleGoogleFailure = () => {
@@ -57,7 +39,7 @@ export const GoogleLoginButton = () => {
           shape="rectangular"
           theme="outline"
           size="large"
-          
+
         />
       )}
 
