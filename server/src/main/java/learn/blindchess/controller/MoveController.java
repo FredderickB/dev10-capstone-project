@@ -7,8 +7,10 @@ import learn.blindchess.domain.ResultType;
 import learn.blindchess.dto.FullTurnDto;
 import learn.blindchess.dto.MoveDto;
 import learn.blindchess.dto.MoveRequestDto;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,11 @@ public class MoveController {
         this.moveService = moveService;
     }
 
+    @PreAuthorize("@gameSecurity.isAuthorized(principal, #moveRequestDto.gameId)")
     @PostMapping
-    public ResponseEntity<?> playMove(@RequestBody MoveRequestDto moveRequestDto) throws DataAccessException {
+    public ResponseEntity<?> playMove(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @RequestBody MoveRequestDto moveRequestDto) throws DataAccessException {
 
         Result<FullTurnDto> result = moveService.processPlayerMove(moveRequestDto);
 
@@ -39,16 +44,12 @@ public class MoveController {
         return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
     }
 
+    @PreAuthorize("@gameSecurity.isAuthorized(principal, #gameId)")
     @GetMapping("/{gameId}")
     public ResponseEntity<?> getMoves(
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable int gameId) throws DataAccessException {
 
-        Integer userId = null;
-// todo: authorize user
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
 
         List<MoveDto> moves = moveService.getMovesByGameId(gameId);
 

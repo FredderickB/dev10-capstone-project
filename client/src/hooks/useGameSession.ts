@@ -72,7 +72,7 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
           errors: result.errors ?? ['Failed to load game'],
         }));
       }
-    }, [token]
+    }, [token, rawGameId]
   )
  
   
@@ -127,9 +127,6 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
           errors: result.errors ?? ['Failed to execute move'],
         }));
       } else if (result.data) {
-        const updatedFen = result.data.updatedFen;
-        const nextColor = getColorToMove(updatedFen) ?? 'white';
-        const nextMoveNum = result.data.moveNumber + 1;
 
         setGameState((prev) => ({
           ...prev,
@@ -143,7 +140,7 @@ export function useGameSession(rawGameId: string | undefined, token: string | nu
         loadGame();
       }
     },
-    [gameState, token]
+    [gameState, token, loadGame]
   );
 
   const handleResign = useCallback(async () => {

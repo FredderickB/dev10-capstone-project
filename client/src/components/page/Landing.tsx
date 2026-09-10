@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Landing() {
 
-    const { token } = useAuth()
+    const { isRegisteredUser } = useAuth()
     return (
         <>
             <div className='container d-flex flex-column align-items-center justify-content-center text-center py-5 min-vh-80'>
@@ -14,7 +14,7 @@ export default function Landing() {
                     <Link to='newgame' className='btn btn-dojo-gold btn-lg w-100 text-uppercase shadow-sm tracking-wider'>
                         Start a new match
                     </Link>
-                    {token ? null :
+                    {isRegisteredUser ? null :
                         <GoogleLoginButton />
                     }
                 </div>

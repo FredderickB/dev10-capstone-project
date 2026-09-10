@@ -27,7 +27,7 @@ const AuthLinks = ({closeMenu}: props) => (
 export default function Navbar() {
 
 
-    const { token } = useAuth();
+    const { isRegisteredUser } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen((prev) => !prev);
@@ -67,7 +67,7 @@ export default function Navbar() {
 
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}>
           <ul className="navbar-nav ms-auto gap-lg-4 text-end text-lg-start mt-3 mt-lg-0">
-            {token && (
+            { isRegisteredUser && (
               <AuthLinks closeMenu={closeMenu} />
             ) }
           </ul>

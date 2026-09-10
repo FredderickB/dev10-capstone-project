@@ -3,11 +3,11 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom';
 
 export default function LogoutPage() {
-  const { setToken } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate()
 
   function handleLogout() {
-    setToken(null);
+    logout();
     navigate('/');
   }
 

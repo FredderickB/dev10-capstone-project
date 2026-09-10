@@ -8,8 +8,10 @@ import learn.blindchess.dto.GameRequestDto;
 import learn.blindchess.dto.GameResponseDto;
 import learn.blindchess.dto.GameSummaryDto;
 import learn.blindchess.model.Game;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ import static learn.blindchess.controller.ErrorResponse.build;
 @RestController
 public class GameController {
 
-    private GameService service;
+    private final GameService service;
 
     public GameController(GameService service) {
         this.service = service;
@@ -30,11 +32,11 @@ public class GameController {
 
     @PostMapping
     public ResponseEntity<?> createGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal user,
             @Valid @RequestBody GameRequestDto requestDto
     ) throws DataAccessException {
 
-        Result<Game> result = service.create(userId, requestDto);
+        Result<Game> result = service.create(user, requestDto);
 
         if (!result.isSuccess()) {
             return build(result);
@@ -45,12 +47,11 @@ public class GameController {
 
     }
 
+    @PreAuthorize("@gameSecurity.isAuthorized(principal, #gameId)")
     @GetMapping("/{gameId}")
     public ResponseEntity<?> getGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable int gameId) throws DataAccessException {
-
-        // todo: authorize user
 
         Game gameFound = service.findById(gameId);
 
@@ -62,12 +63,11 @@ public class GameController {
         return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("@gameSecurity.isAuthorized(principal, #gameId)")
     @DeleteMapping("/{gameId}")
     public ResponseEntity<?> deleteGame(
-            @AuthenticationPrincipal Integer userId,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable int gameId) throws DataAccessException {
-
-        // todo: authorize user
 
         boolean result = service.delete(gameId);
 
@@ -78,18 +78,13 @@ public class GameController {
         return new ResponseEntity<>("game not found", HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping()
     public ResponseEntity<?> getAllGames(
-            @AuthenticationPrincipal Integer userId
+            @AuthenticationPrincipal UserPrincipal principal
             ) throws DataAccessException {
 
-        // todo: authorize user
-
-        if (userId == null) {
-            return new ResponseEntity<>("User Id null", HttpStatus.BAD_REQUEST);
-        }
-
-        List<GameSummaryDto> gamesFound = service.findAllByUserId(userId);
+        List<GameSummaryDto> gamesFound = service.findAllByUserId(principal.getUserId());
 
         if (gamesFound != null) {
             return new ResponseEntity<>(gamesFound, HttpStatus.OK);
@@ -98,19 +93,12 @@ public class GameController {
         return new ResponseEntity<>("games not found", HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("@gameSecurity.isAuthorized(principal, #gameId)")
     @PostMapping("/{gameId}/resign")
     public ResponseEntity<?> resignGame(
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable int gameId
     ) throws DataAccessException {
-
-        Integer userId = null;
-
-        // todo: authorize user
-
-        if (authentication != null && authentication.getPrincipal() instanceof Integer id) {
-            userId = id;
-        }
 
         Game gameFound = service.findById(gameId);
 
