@@ -7,8 +7,10 @@ import learn.blindchess.dto.GameResponseDto;
 import learn.blindchess.dto.UsernameDto;
 import learn.blindchess.model.Game;
 import learn.blindchess.model.User;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,13 +29,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public ResponseEntity<?> getUsername(
-            @AuthenticationPrincipal Integer userId) throws DataAccessException {
+            @AuthenticationPrincipal UserPrincipal user) throws DataAccessException {
 
-        // todo: authorize user
-
-        Result<User> result = userService.findById(userId);
+        Result<User> result = userService.findById(user.getUserId());
 
         if (!result.isSuccess()) {
             return build(result);

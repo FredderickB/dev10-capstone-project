@@ -73,7 +73,7 @@ export default function GamesTable({ games, ConfirmDeleteClick }: props) {
                 )}
               </td>
             </tr>
-          ))}
+          )).toReversed()}
         </tbody>
       </table>
     </div>

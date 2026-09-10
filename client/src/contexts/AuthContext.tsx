@@ -15,23 +15,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
   const [isRegisteredUser, setIsRegisteredUser] = useState<boolean>(false)
 
-  const updateToken = (newToken: string | null) => {
-    if (newToken) {
-      localStorage.setItem('token', newToken);
-    }
-    else {
-      localStorage.removeItem('token');
-    }
-    setToken(newToken);
-  };
 
   const initGuestSession = useCallback(async () => {
     const result = await fetchGuestToken();
     if (result.success && result.data) {
-      updateToken(result.data.token);
+      setToken(result.data.token)
       setIsRegisteredUser(false)
     } else {
-      updateToken(null);
+      setToken(null);
       setIsRegisteredUser(false);
     }
   }, [])
@@ -41,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const savedToken = localStorage.getItem('token');
       if (savedToken) {
         setToken(savedToken);
-        setIsRegisteredUser(true);
+        setIsRegisteredUser(true)
       } else {
         await initGuestSession();
       }

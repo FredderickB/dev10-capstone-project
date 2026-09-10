@@ -2,7 +2,9 @@ package learn.blindchess.domain;
 
 import learn.blindchess.data.DataAccessException;
 import learn.blindchess.data.UserRepository;
+import learn.blindchess.model.Game;
 import learn.blindchess.model.User;
+import learn.blindchess.security.UserPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class UserService {
     }
 
     @Transactional
-    public Result<User> processGoogleUser(User user) throws DataAccessException{
+    public Result<User> processGoogleUser(User user) throws DataAccessException {
 
         Result<User> result = new Result<>();
 
@@ -49,5 +51,14 @@ public class UserService {
         }
 
         return result;
+    }
+
+    public boolean isUserAuthorized(UserPrincipal user, Game game) throws DataAccessException {
+
+        if (user.isGuest()) {
+            return game.getGuestId().equals(user.getGuestIdentifier());
+        }
+
+        return game.getUserId().equals(user.getUserId());
     }
 }
